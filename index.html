@@ -75,13 +75,26 @@
     padding: 14px 28px; border-radius: 10px;
   }
 
+
+  .gallery { padding: 8px 0 64px; }
+  .gallery h2 { font-size: 34px; font-weight: 800; text-transform: uppercase; text-align: center; margin-bottom: 8px; }
+  .gallery > p { color: var(--muted); text-align: center; margin: 0 auto 28px; max-width: 560px; }
+  .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+  .shots figure { margin: 0; }
+  .shots img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); background: #111316; }
+  .shots figcaption { margin-top: 10px; color: var(--muted); font-size: 16px; }
+  .shots figcaption b { color: var(--ink); font-weight: 500; }
+  .btn.ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); margin-left: 8px; }
+
   footer { color: var(--muted); font-size: 14px; text-align: center; padding: 0 0 40px; }
 
   @media (max-width: 760px) {
     header { padding-top: 32px; }
     .show { grid-template-columns: 1fr; gap: 32px; padding: 40px 0; }
     .shot { max-width: 340px; margin: 0 auto; }
-    .cards { grid-template-columns: 1fr; }
+    .cards, .shots { grid-template-columns: 1fr; }
+    .shots { max-width: 420px; margin: 0 auto; }
+    .btn.ghost { margin: 12px 0 0; }
   }
 </style>
 </head>
@@ -103,6 +116,16 @@
       </ul>
     </section>
 
+    <section class="gallery">
+      <h2>From a real practice night</h2>
+      <p>One rider, one night at the track. Everything below came off the GPS box.</p>
+      <div class="shots">
+        <figure><img src="img/report.png" alt="Training report: best lap 1:05.9, longest jump about 24 ft, 50 minutes riding, 29 laps, top speed 35.6 mph" width="1218" height="885" loading="lazy"><figcaption><b>The night at a glance.</b> Best lap, longest jump, riding time, laps, top speed.</figcaption></figure>
+        <figure><img src="img/coach.png" alt="Coach's take: most time lost at turn 4, next moto aim for 19.3 mph out of turn 4" width="1218" height="1023" loading="lazy"><figcaption><b>What to work on next moto.</b> Where the time went, in plain English.</figcaption></figure>
+        <figure><img src="img/starts.png" alt="Start practice table: seven starts timed to 30 and 65 feet, best 2.67 seconds to 65 feet" width="1104" height="1375" loading="lazy"><figcaption><b>Every start, timed.</b> Seven practice starts to 65 ft, best one highlighted.</figcaption></figure>
+      </div>
+    </section>
+
     <section class="who">
       <h2>Built for moto families</h2>
       <div class="cards">
@@ -114,8 +137,8 @@
 
     <section class="join">
       <h2>Now testing with a few riders</h2>
-      <p>We're running Moto Tools with a small group of riders this season. Want in, or run a track or training program? Send us a message.</p>
-      <a class="btn" href="https://www.instagram.com/mototoolsmx/">Message @mototoolsmx</a>
+      <p>We're running Moto Tools with a small group of riders this season. Want in, or run a track or training program? Email or message us.</p>
+      <a class="btn" href="mailto:hello@mototoolsmx.com">hello@mototoolsmx.com</a><a class="btn ghost" href="https://www.instagram.com/mototoolsmx/">@mototoolsmx</a>
     </section>
 
     <footer>© 2026 Moto Tools · Map tiles © OpenStreetMap contributors</footer>
