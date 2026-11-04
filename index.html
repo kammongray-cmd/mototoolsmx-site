@@ -86,14 +86,31 @@
   .shots figcaption b { color: var(--ink); font-weight: 500; }
   .btn.ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); margin-left: 8px; }
 
+  .post { padding: 8px 0 64px; }
+  .post h2 { font-size: 34px; font-weight: 800; text-transform: uppercase; text-align: center; margin-bottom: 8px; }
+  .post > p { color: var(--muted); text-align: center; margin: 0 auto 28px; max-width: 600px; }
+  .post-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+  .post-grid figure { margin: 0; }
+  .post-grid video, .post-grid img {
+    display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); background: #111316;
+  }
+  .post-grid figcaption { margin-top: 10px; color: var(--muted); font-size: 16px; }
+  .post-grid figcaption b { color: var(--ink); font-weight: 500; }
+  .soon {
+    display: inline-block; margin-bottom: 8px; padding: 3px 10px; border-radius: 999px;
+    border: 1px solid var(--orange); color: var(--orange);
+    font: 800 14px 'Barlow Condensed', sans-serif; letter-spacing: .06em; text-transform: uppercase;
+  }
+
   footer { color: var(--muted); font-size: 14px; text-align: center; padding: 0 0 40px; }
 
   @media (max-width: 760px) {
     header { padding-top: 32px; }
     .show { grid-template-columns: 1fr; gap: 32px; padding: 40px 0; }
     .shot { max-width: 340px; margin: 0 auto; }
-    .cards, .shots { grid-template-columns: 1fr; }
-    .shots { max-width: 420px; margin: 0 auto; }
+    .cards, .shots, .post-grid { grid-template-columns: 1fr; }
+    .shots, .post-grid { max-width: 420px; margin: 0 auto; }
+    .post-grid { gap: 32px; }
     .btn.ghost { margin: 12px 0 0; }
   }
 </style>
@@ -123,6 +140,16 @@
         <figure><img src="img/report.png" alt="Training report: best lap 1:05.9, 29 laps, top speed 35.6 mph" width="1218" height="588" loading="lazy"><figcaption><b>The night at a glance.</b> Best lap, laps, top speed.</figcaption></figure>
         <figure><img src="img/coach.png" alt="Coach's take: most time lost at turn 4, next moto aim for 19.3 mph out of turn 4" width="1218" height="1023" loading="lazy"><figcaption><b>What to work on next moto.</b> Where the time went, in plain English.</figcaption></figure>
         <figure><img src="img/starts.png" alt="Start practice table: seven starts timed to 30 and 65 feet, best 2.67 seconds to 65 feet" width="1104" height="1375" loading="lazy"><figcaption><b>Every start, timed.</b> Seven practice starts to 65 ft, best one highlighted.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="post">
+      <h2>Turn practice into a post</h2>
+      <p>I built an app that puts the ride on the video. The GPS ride and the phone video line up, so the plate, lap timer, speed and track map show what really happened in that moment. Stats sponsors can see.</p>
+      <div class="post-grid">
+        <figure><video src="img/post.mp4" poster="img/post-poster.jpg" width="450" height="800" autoplay muted loop playsinline preload="metadata" aria-label="Dane riding his yard track with his plate, lap timer, lap time banner, speed and track map on the video"></video><figcaption><b>A video, ready to post.</b> Lap times and speed from the GPS box, on top of the phone video.</figcaption></figure>
+        <figure><img src="img/post-photo.jpg" alt="A photo of Dane coming out of a turn with lap 16, 0 to 11 mph out of the turn, 10 mph and the track map on it" width="600" height="1066" loading="lazy"><figcaption><b>Photos too.</b> A photo gets the stats from the second it was taken.</figcaption></figure>
+        <figure><span class="soon">Coming to the iPhone app</span><img src="img/post-editor.jpg" alt="The editor on an iPhone: a timeline to line up the video with the ride, and switches for what to show" width="600" height="1224" loading="lazy"><figcaption><b>Line it up, pick what shows.</b> Slide the ride to match the video and turn boxes on or off.</figcaption></figure>
       </div>
     </section>
 
