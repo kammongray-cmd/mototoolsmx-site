@@ -7,7 +7,10 @@
 <meta name="description" content="Every day, every lap, every turn, and whether it got better since last week. GPS practice tracking for motocross riders, parents and trainers.">
 <meta property="og:title" content="Moto Tools">
 <meta property="og:description" content="Race day, practice day, every day. GPS lap tracking for moto families.">
-<meta property="og:image" content="img/share.png">
+<meta property="og:image" content="https://mototoolsmx.com/img/share.png">
+<meta property="og:url" content="https://mototoolsmx.com/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="img/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,6 +88,18 @@
   .shots figcaption { margin-top: 10px; color: var(--muted); font-size: 16px; }
   .shots figcaption b { color: var(--ink); font-weight: 500; }
   .btn.ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); margin-left: 8px; }
+  .join .fine { font-size: 15px; margin-top: -14px; }
+  .signup {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; max-width: 620px; margin: 0 auto 28px; text-align: left;
+  }
+  .signup label { display: grid; gap: 6px; color: var(--muted); font-size: 15px; }
+  .signup input, .signup select {
+    font: 400 17px Barlow, system-ui, sans-serif; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; width: 100%;
+  }
+  .signup input:focus, .signup select:focus { outline: 2px solid var(--orange); outline-offset: 1px; }
+  .signup button { grid-column: 1 / -1; justify-self: center; border: 0; cursor: pointer; margin-top: 8px; }
+  .signup .fine { grid-column: 1 / -1; text-align: center; margin: 0; }
 
   .post { padding: 8px 0 64px; }
   .post h2 { font-size: 34px; font-weight: 800; text-transform: uppercase; text-align: center; margin-bottom: 8px; }
@@ -112,6 +127,7 @@
     .shots, .post-grid { max-width: 420px; margin: 0 auto; }
     .post-grid { gap: 32px; }
     .btn.ghost { margin: 12px 0 0; }
+    .signup { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -138,7 +154,7 @@
       <p>One rider, one night at the track. Everything below came off the GPS box.</p>
       <div class="shots">
         <figure><img src="img/report.png" alt="Training report: best lap 1:05.9, 29 laps, top speed 35.6 mph" width="1218" height="588" loading="lazy"><figcaption><b>The night at a glance.</b> Best lap, laps, top speed.</figcaption></figure>
-        <figure><img src="img/coach.png" alt="Coach's take: most time lost at turn 4, next moto aim for 19.3 mph out of turn 4" width="1218" height="1023" loading="lazy"><figcaption><b>What to work on next moto.</b> Where the time went, in plain English.</figcaption></figure>
+        <figure><img src="img/coach.png" alt="Coach's take: most time lost at turn 4, next moto aim for 19.3 mph out of turn 4" width="1218" height="955" loading="lazy"><figcaption><b>What to work on next moto.</b> Where the time went, in plain English.</figcaption></figure>
         <figure><img src="img/starts.png" alt="Start practice table: seven starts timed to 30 and 65 feet, best 2.67 seconds to 65 feet" width="1104" height="1375" loading="lazy"><figcaption><b>Every start, timed.</b> Seven practice starts to 65 ft, best one highlighted.</figcaption></figure>
       </div>
     </section>
@@ -157,16 +173,40 @@
       <h2>Built for moto families</h2>
       <div class="cards">
         <div class="card"><h3>Parents</h3><p>See what happened out there without standing at every corner with a stopwatch.</p></div>
-        <div class="card"><h3>Trainers</h3><p>Each rider's sections side by side, and a clear picture of who's improving where.</p></div>
+        <div class="card"><h3>Trainers</h3><p>Notes on what each rider worked on and what's next, so nothing gets lost between sessions or trainers. All your riders side by side is on the way.</p></div>
         <div class="card"><h3>Riders</h3><p>Beat your own best turn. Points and a game of your home track are on the way.</p></div>
       </div>
     </section>
 
-    <section class="join">
-      <h2>Now testing with a few riders</h2>
-      <p>We're running Moto Tools with a small group of riders this season. Want in, or run a track or training program? Email or message us.</p>
-      <a class="btn" href="mailto:hello@mototoolsmx.com">hello@mototoolsmx.com</a><a class="btn ghost" href="https://www.instagram.com/mototoolsmx/">@mototoolsmx</a>
+    <section class="join" id="join">
+      <h2>Founding families</h2>
+      <p>I'm Kam, a race dad and former bike shop owner. I built Moto Tools for my own son's practice. This winter about 10 more families get it free, in exchange for honest feedback. In December I'll ask what it's worth to you before setting a price.</p>
+      <p class="fine">Works with a Dragy or RaceBox GPS box in the bar pad. Today it syncs from Chrome on a laptop or an Android phone. The iPhone app is in testing.</p>
+      <form class="signup" id="signup">
+        <label>Your name<input name="name" autocomplete="name" required></label>
+        <label>I'm a<select name="who">
+          <option>Parent</option><option>Rider</option><option>Trainer or program</option><option>Track or camp</option>
+        </select></label>
+        <label>Rider's first name and class<input name="rider" placeholder="Like: Sam, 65cc"></label>
+        <label>Where you ride most<input name="track" placeholder="Track name"></label>
+        <label>GPS box<select name="box">
+          <option>Not yet</option><option>Dragy Lite</option><option>Dragy Pro</option><option>RaceBox Micro</option><option>Something else</option>
+        </select></label>
+        <label>Phone (optional)<input name="phone" type="tel" autocomplete="tel"></label>
+        <button class="btn" type="submit">Count me in</button>
+        <p class="fine">This opens your email app with your answers filled in. Nothing is saved on this site.</p>
+      </form>
+      <p>Run a training program, camp or track? Ask about a pilot for your riders.</p>
+      <a class="btn ghost" href="mailto:hello@mototoolsmx.com">hello@mototoolsmx.com</a><a class="btn ghost" href="https://www.instagram.com/mototoolsmx/">@mototoolsmx</a>
     </section>
+    <script>
+      document.getElementById('signup').addEventListener('submit', event => {
+        event.preventDefault();
+        const f = new FormData(event.target), v = k => (f.get(k) || '').trim();
+        const body = [`Name: ${v('name')}`, `I'm a: ${v('who')}`, `Rider and class: ${v('rider')}`, `Where we ride: ${v('track')}`, `GPS box: ${v('box')}`, `Phone: ${v('phone')}`].join('\r\n');
+        location.href = `mailto:hello@mototoolsmx.com?subject=${encodeURIComponent(`Founding families: ${v('name')}`)}&body=${encodeURIComponent(body)}`;
+      });
+    </script>
 
     <footer>© 2026 Moto Tools · Map tiles © OpenStreetMap contributors</footer>
   </div>
