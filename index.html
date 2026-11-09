@@ -179,9 +179,9 @@
     </section>
 
     <section class="join" id="join">
-      <h2>Founding families</h2>
-      <p>I'm Kam, a race dad and former bike shop owner. I built Moto Tools for my own son's practice. This winter about 10 more families get it free, in exchange for honest feedback. After that, founding families keep a locked-in founding rate, well below regular, for as long as they stay. I'll check in with everyone in December.</p>
-      <p class="fine">Works with a Dragy or RaceBox GPS box in the bar pad. We're close to opening the app for beta, and we'll follow up with every family when it's ready.</p>
+      <h2>Get on the list</h2>
+      <p>I'm Kam, a race dad and former bike shop owner. I built Moto Tools for my own son's practice. We're close to opening the app for beta. Sign up and I'll reach out when it's ready.</p>
+      <p class="fine">Works with a Dragy or RaceBox GPS box in the bar pad. No box yet? Sign up anyway.</p>
       <form class="signup" id="signup">
         <label>Your name<input name="name" autocomplete="name" required></label>
         <label>I'm a<select name="who">
@@ -193,7 +193,7 @@
           <option>Not yet</option><option>Dragy Lite</option><option>Dragy Pro</option><option>RaceBox Micro</option><option>Something else</option>
         </select></label>
         <label>Phone (optional)<input name="phone" type="tel" autocomplete="tel"></label>
-        <button class="btn" type="submit">Count me in</button>
+        <button class="btn" type="submit">Put me on the list</button>
         <p class="fine">This opens your email app with your answers filled in. Nothing is saved on this site.</p>
       </form>
       <p>Run a training program, camp or track? Ask about a pilot for your riders.</p>
@@ -204,7 +204,7 @@
         event.preventDefault();
         const f = new FormData(event.target), v = k => (f.get(k) || '').trim();
         const body = [`Name: ${v('name')}`, `I'm a: ${v('who')}`, `Rider and class: ${v('rider')}`, `Where we ride: ${v('track')}`, `GPS box: ${v('box')}`, `Phone: ${v('phone')}`].join('\r\n');
-        location.href = `mailto:hello@mototoolsmx.com?subject=${encodeURIComponent(`Founding families: ${v('name')}`)}&body=${encodeURIComponent(body)}`;
+        location.href = `mailto:hello@mototoolsmx.com?subject=${encodeURIComponent(`Moto Tools list: ${v('name')}`)}&body=${encodeURIComponent(body)}`;
       });
     </script>
 
