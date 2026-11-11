@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Set up your rider · Moto Tools</title>
+<meta name="description" content="Tell us about your rider and we'll build their Moto Tools page.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Set up your rider · Moto Tools">
+<meta property="og:description" content="Two minutes. Tell us about your rider and we'll build their page.">
+<meta property="og:image" content="https://mototoolsmx.com/img/share-wordmark.png">
+<link rel="icon" href="../img/icon-wordmark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Same look as the home page (colors, type, buttons). One column, thumb-sized fields, nothing that needs a new browser. */
+  :root { --orange: #F26B1D; --ink: #F5F3EE; --muted: #A9ADB3; --bg: #17191C; --panel: #212429; --line: #30343A; --bad: #FF8A6B; --good: #5FD38D; }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 18px/1.5 Barlow, system-ui, -apple-system, sans-serif; }
+  a { color: var(--orange); }
+  .wrap { max-width: 600px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 56px max(16px, env(safe-area-inset-left, 0px)); }
+  header { text-align: center; padding: 32px 0 8px; }
+  header img { width: 100%; max-width: 250px; height: auto; }
+  h1 { font: italic 800 clamp(34px, 9vw, 46px)/1 'Barlow Condensed', 'Arial Narrow', sans-serif; text-transform: uppercase; letter-spacing: .01em; margin: 22px 0 8px; text-wrap: balance; }
+  .sub { color: var(--muted); margin: 0 auto; max-width: 30em; }
+  .steps { list-style: none; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 0; margin: 18px 0 0; }
+  .steps li { font: 600 15px 'Barlow Condensed', sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+  .steps li b { color: var(--orange); margin-right: 6px; }
+
+  form { display: grid; gap: 18px; margin-top: 26px; }
+  fieldset { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); padding: 20px 18px; margin: 0; display: grid; gap: 14px; min-width: 0; }
+  legend { font: 800 24px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .03em; padding: 0 8px; margin-left: -8px; }
+  label, .label { display: grid; gap: 6px; color: var(--muted); font-size: 15px; font-weight: 500; }
+  label small, .label small { font-weight: 400; }
+  input[type=text], input[type=email], input[type=tel], select, textarea {
+    font: 400 18px Barlow, system-ui, sans-serif; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px;
+    padding: 13px 12px; width: 100%; min-height: 50px; -webkit-appearance: none; appearance: none;
+  }
+  select { background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 20px) 22px, calc(100% - 14px) 22px; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 36px; }
+  textarea { min-height: 84px; resize: vertical; }
+  input:focus, select:focus, textarea:focus, button:focus-visible, .pick input:focus-visible + span, .sw input:focus-visible + span { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .third { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+
+  /* Pick one of a few: big tappable pills (phone type). */
+  .picks { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pick { position: relative; display: block; }
+  .pick input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+  .pick span { display: block; padding: 11px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 17px; cursor: pointer; }
+  .pick input:checked + span { border-color: var(--orange); background: rgba(242, 107, 29, .16); font-weight: 600; }
+
+  /* The rider: a plate that fills in as they type, and two rows of colors. */
+  .rider { border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 14px; }
+  .rider:first-of-type { border-top: 0; padding-top: 0; }
+  .rider-head { display: flex; align-items: center; gap: 14px; }
+  .plate { width: 96px; height: auto; flex: none; filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); }
+  .rider-name { font: italic 800 30px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; overflow-wrap: anywhere; min-width: 0; }
+  .rider-name small { display: block; font: 600 14px 'Barlow Condensed', sans-serif; letter-spacing: .18em; color: var(--muted); font-style: normal; margin-top: 4px; }
+  .drop { margin-left: auto; background: none; border: 0; color: var(--muted); font: 500 15px Barlow, sans-serif; text-decoration: underline; cursor: pointer; padding: 10px 0 10px 10px; }
+  .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+  .sw { position: relative; display: block; }
+  .sw input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+  .sw span { display: block; width: 44px; height: 44px; border-radius: 10px; border: 2px solid var(--line); cursor: pointer; }
+  .sw input:checked + span { border-color: var(--ink); box-shadow: 0 0 0 2px var(--orange); }
+
+  .btn { display: inline-block; background: var(--orange); color: #17191C; border: 0; cursor: pointer; font: 800 22px 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .04em; padding: 16px 28px; border-radius: 12px; width: 100%; min-height: 58px; }
+  .btn[disabled] { opacity: .6; cursor: default; }
+  .ghost { background: transparent; color: var(--ink); border: 2px dashed var(--line); font-size: 18px; min-height: 50px; padding: 12px; }
+  .tick { display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-size: 17px; cursor: pointer; }
+  .tick input { width: 26px; height: 26px; margin: 1px 0 0; accent-color: var(--orange); flex: none; }
+  .fine { color: var(--muted); font-size: 15px; margin: 0; text-align: center; }
+  .problem { color: var(--bad); font-weight: 500; margin: 0; text-align: center; min-height: 1.5em; }
+  .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .sent { text-align: center; padding: 34px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); margin-top: 26px; display: grid; gap: 14px; justify-items: center; }
+  .sent:focus { outline: none; }
+  .sent h2 { font: italic 800 38px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; margin: 0; }
+  .sent ol { text-align: left; margin: 0; padding-left: 22px; display: grid; gap: 8px; color: var(--muted); max-width: 26em; }
+  .sent ol b { color: var(--ink); font-weight: 500; }
+  .check { width: 62px; height: 62px; border-radius: 50%; background: rgba(95, 211, 141, .16); color: var(--good); display: grid; place-items: center; font-size: 34px; }
+  footer { color: var(--muted); font-size: 14px; text-align: center; padding-top: 28px; }
+  [hidden] { display: none !important; }
+  @media (max-width: 420px) { .two, .third { grid-template-columns: 1fr; } .plate { width: 84px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="../"><img src="../img/wordmark.png" alt="Moto Tools"></a>
+    <h1>Set up your rider</h1>
+    <p class="sub">Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started.</p>
+    <ol class="steps"><li><b>1</b>You fill this out</li><li><b>2</b>We build the page</li><li><b>3</b>We text your links</li></ol>
+  </header>
+
+  <form id="setup" novalidate>
+    <fieldset>
+      <legend>You</legend>
+      <label>Your name<input type="text" name="parent" autocomplete="name" maxlength="60" required></label>
+      <label>Cell phone <small>We text your links here.</small><input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="30" required></label>
+      <label>Email <small>This is how you sign in. We email a code, so there's no password.</small><input type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254" required></label>
+      <div class="label">Your phone
+        <div class="picks" role="radiogroup" aria-label="Your phone">
+          <label class="pick"><input type="radio" name="phoneKind" value="iPhone" checked><span>iPhone</span></label>
+          <label class="pick"><input type="radio" name="phoneKind" value="Android"><span>Android</span></label>
+          <label class="pick"><input type="radio" name="phoneKind" value="Both or not sure"><span>Both or not sure</span></label>
+        </div>
+      </div>
+      <label>Another parent's email <small>Optional. They can sign in too.</small><input type="email" name="email2" autocomplete="off" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254"></label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Your rider</legend>
+      <div id="riders"></div>
+      <button type="button" class="btn ghost" id="addRider">+ Add another rider</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Riding</legend>
+      <label>GPS box<select name="box">
+        <option>Not yet</option><option>Dragy Lite</option><option>Dragy Pro</option><option>RaceBox Micro</option><option>Something else</option>
+      </select></label>
+      <label>Where you ride most <small>Optional.</small><input type="text" name="track" maxlength="60" placeholder="Track name"></label>
+      <label>Anything we should know? <small>Optional.</small><textarea name="note" maxlength="300"></textarea></label>
+    </fieldset>
+
+    <label class="trap" aria-hidden="true">Leave this blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    <label class="tick"><input type="checkbox" name="guardian" required><span>I'm this rider's parent or guardian, and it's OK to set up their page.</span></label>
+    <p class="problem" id="problem" role="alert"></p>
+    <button class="btn" type="submit" id="send">Send it to Kam</button>
+    <p class="fine">We use this only to set up your rider's page. Rides stay private to your family. <a href="../privacy/">Privacy</a></p>
+  </form>
+
+  <section class="sent" id="sent" hidden tabindex="-1">
+    <div class="check" aria-hidden="true">✓</div>
+    <h2>Got it</h2>
+    <p class="sub" id="sentLine"></p>
+    <ol>
+      <li><b>We build the page.</b> Usually the same day.</li>
+      <li><b>We text you two links:</b> one to get the app, one that connects you to your rider.</li>
+      <li><b>You sign in with your email.</b> No password.</li>
+    </ol>
+    <a class="btn" href="../" style="width:auto">Back to Moto Tools</a>
+  </section>
+
+  <noscript><p class="problem">This form needs JavaScript. Or just text Kam your rider's name, number and bike.</p></noscript>
+  <footer>Moto Tools · <a href="../">mototoolsmx.com</a></footer>
+</div>
+
+<template id="riderTemplate">
+  <div class="rider">
+    <div class="rider-head">
+      <svg class="plate" viewBox="0 0 120 110" aria-hidden="true">
+        <path class="p-main" d="M14 6 H106 Q114 6 113 15 L104 82 Q102 96 88 98 L78 100 Q74 88 60 88 Q46 88 42 100 L32 98 Q18 96 16 82 L7 15 Q6 6 14 6 Z" fill="#F26B1D" stroke="#0b0c0e" stroke-width="3" stroke-linejoin="round"/>
+        <path class="p-accent" d="M12.5 62 H107.5 L104 82 Q102 96 88 98 L78 100 Q74 88 60 88 Q46 88 42 100 L32 98 Q18 96 16 82 Z" fill="#141414"/>
+        <text class="p-num" x="60" y="56" text-anchor="middle" font-family="'Barlow Condensed', 'Arial Narrow', sans-serif" font-style="italic" font-weight="800" font-size="50" fill="#fff"></text>
+      </svg>
+      <div class="rider-name"><span class="n-first">Rider</span><small class="n-last"></small></div>
+      <button type="button" class="drop" hidden>Remove</button>
+    </div>
+    <div class="two">
+      <label>First name<input type="text" data-f="first" maxlength="30" autocomplete="off" required></label>
+      <label>Last name<input type="text" data-f="last" maxlength="30" autocomplete="off"></label>
+    </div>
+    <div class="third">
+      <label>Bike <small>Like KTM 65 SX</small><input type="text" data-f="bike" maxlength="40" autocomplete="off"></label>
+      <label>Race number<input type="text" data-f="number" maxlength="4" inputmode="numeric" autocomplete="off" placeholder="72"></label>
+    </div>
+    <label>Class <small>Optional. Like 65cc 7-9.</small><input type="text" data-f="cls" maxlength="30" autocomplete="off"></label>
+    <div class="label">Plate color<div class="swatches" data-c="main"></div></div>
+    <div class="label">Second color<div class="swatches" data-c="accent"></div></div>
+  </div>
+</template>
+
+<script>
+(function () {
+  // Where the form goes: the Moto Tools app server. On a test copy of this page, the test server on the same computer.
+  var live = /(^|\.)mototoolsmx\.com$/.test(location.hostname);
+  var API = live ? 'https://app.mototoolsmx.com' : location.protocol + '//' + location.hostname + ':4491';
+  var MAX_RIDERS = 6;
+  // Bike colors people know by name.
+  var COLORS = [['#F26B1D', 'Orange'], ['#E01E26', 'Red'], ['#1C5FD4', 'Blue'], ['#1FA84A', 'Green'], ['#F4C430', 'Yellow'], ['#7B2FBE', 'Purple'], ['#F5F3EE', 'White'], ['#141414', 'Black']];
+  var form = document.getElementById('setup'), list = document.getElementById('riders'), add = document.getElementById('addRider');
+  var problem = document.getElementById('problem'), send = document.getElementById('send'), count = 0;
+
+  function light(hex) { var n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 > 150; }
+  function swatches(box, group, picked) {
+    COLORS.forEach(function (color) {
+      var label = document.createElement('label'); label.className = 'sw'; label.title = color[1];
+      var input = document.createElement('input'); input.type = 'radio'; input.name = group; input.value = color[0]; input.checked = color[0] === picked;
+      input.setAttribute('aria-label', color[1]);
+      var chip = document.createElement('span'); chip.style.background = color[0];
+      label.appendChild(input); label.appendChild(chip); box.appendChild(label);
+    });
+  }
+  function field(card, name) { return card.querySelector('[data-f="' + name + '"]'); }
+  function color(card, which) { var on = card.querySelector('[data-c="' + which + '"] input:checked'); return on ? on.value : COLORS[0][0]; }
+  function paint(card) {
+    var main = color(card, 'main'), first = field(card, 'first').value.trim();
+    card.querySelector('.p-main').setAttribute('fill', main);
+    card.querySelector('.p-accent').setAttribute('fill', color(card, 'accent'));
+    var num = card.querySelector('.p-num'), text = field(card, 'number').value.trim().replace(/^#/, '').slice(0, 4);
+    num.textContent = text; num.setAttribute('fill', light(main) ? '#141414' : '#ffffff');
+    num.setAttribute('font-size', text.length > 3 ? 34 : text.length > 2 ? 42 : 50);
+    card.querySelector('.n-first').textContent = first || 'Rider';
+    card.querySelector('.n-last').textContent = field(card, 'last').value.trim();
+  }
+  function tidy() {
+    var cards = list.querySelectorAll('.rider');
+    for (var i = 0; i < cards.length; i++) cards[i].querySelector('.drop').hidden = cards.length < 2;
+    add.hidden = cards.length >= MAX_RIDERS;
+  }
+  function addRider(focus) {
+    var card = document.getElementById('riderTemplate').content.firstElementChild.cloneNode(true), n = ++count;
+    swatches(card.querySelector('[data-c="main"]'), 'main' + n, '#F26B1D');
+    swatches(card.querySelector('[data-c="accent"]'), 'accent' + n, '#141414');
+    card.addEventListener('input', function () { paint(card); });
+    card.addEventListener('change', function () { paint(card); });
+    card.querySelector('.drop').addEventListener('click', function () { card.remove(); tidy(); });
+    list.appendChild(card); paint(card); tidy();
+    if (focus) field(card, 'first').focus();
+  }
+  add.addEventListener('click', function () { addRider(true); });
+  addRider(false);
+
+  function value(name) { var one = form.elements[name]; return one ? String(one.value || '').trim() : ''; }
+  function say(words, at) { problem.textContent = words; if (at) { at.focus(); if (at.scrollIntoView) at.scrollIntoView({ block: 'center' }); } }
+  function gather() {
+    var riders = [], cards = list.querySelectorAll('.rider');
+    for (var i = 0; i < cards.length; i++) {
+      var card = cards[i];
+      riders.push({ first: field(card, 'first').value.trim(), last: field(card, 'last').value.trim(), number: field(card, 'number').value.trim(),
+        bike: field(card, 'bike').value.trim(), cls: field(card, 'cls').value.trim(), main: color(card, 'main'), accent: color(card, 'accent') });
+    }
+    return { parent: value('parent'), phone: value('phone'), email: value('email'), email2: value('email2'), phoneKind: value('phoneKind'),
+      riders: riders, box: value('box'), track: value('track'), note: value('note'), guardian: form.elements.guardian.checked, website: value('website') };
+  }
+  // The same checks the server makes, said next to the field, so nobody waits to find out.
+  function check(data) {
+    if (!data.parent) return say('Add your name.', form.elements.parent);
+    if (data.phone.replace(/\D/g, '').length < 7) return say('Add a cell number we can text.', form.elements.phone);
+    if (!/^\S+@\S+\.\S{2,}$/.test(data.email)) return say('Check your email address.', form.elements.email);
+    if (data.email2 && !/^\S+@\S+\.\S{2,}$/.test(data.email2)) return say('Check the other parent\'s email, or leave it blank.', form.elements.email2);
+    var cards = list.querySelectorAll('.rider');
+    for (var i = 0; i < data.riders.length; i++) {
+      if (!data.riders[i].first) return say('Add your rider\'s first name.', field(cards[i], 'first'));
+      if (data.riders[i].number && !/^#?\d{1,3}[a-z]?$/i.test(data.riders[i].number)) return say('A race number is up to 3 digits, like 72 or 7A. Or leave it blank.', field(cards[i], 'number'));
+    }
+    if (!data.guardian) return say('Tick the box to say you\'re the rider\'s parent or guardian.', form.elements.guardian);
+    return true;
+  }
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var data = gather();
+    if (check(data) !== true) return;
+    problem.textContent = ''; send.disabled = true; send.textContent = 'Sending…';
+    var back = function (words) { send.disabled = false; send.textContent = 'Send it to Kam'; say(words); };
+    // Plain text holding JSON: a browser sends that to another address without a pre-check, so it works everywhere.
+    fetch(API + '/api/setup-request', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
+      .then(function (answer) { return answer.json().catch(function () { return {}; }).then(function (body) { return { ok: answer.ok, body: body }; }); })
+      .then(function (got) {
+        if (!got.ok) return back(got.body.error || 'That didn\'t go through. Try again in a minute.');
+        var names = data.riders.map(function (one) { return one.first; });
+        var who = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : names[0];
+        document.getElementById('sentLine').textContent = 'Thanks, ' + data.parent.split(' ')[0] + '. We have what we need to set up ' + who + '.';
+        form.hidden = true; var sent = document.getElementById('sent'); sent.hidden = false; sent.focus(); window.scrollTo(0, 0);
+      })
+      .catch(function () { back('Couldn\'t reach Moto Tools. Check your signal and try again.'); });
+  });
+})();
+</script>
+</body>
+</html>
