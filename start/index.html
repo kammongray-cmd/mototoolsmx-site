@@ -122,13 +122,14 @@
         <option>Not yet</option><option>Dragy Lite</option><option>Dragy Pro</option><option>RaceBox Micro</option><option>Something else</option>
       </select></label>
       <label>Where you ride most <small>Optional.</small><input type="text" name="track" maxlength="60" placeholder="Track name"></label>
+      <label>Instagram or other social handles <small>Optional. So we can tag your rider.</small><input type="text" name="social" maxlength="80" autocomplete="off" autocapitalize="off" placeholder="@yourrider"></label>
       <label>Anything we should know? <small>Optional.</small><textarea name="note" maxlength="300"></textarea></label>
     </fieldset>
 
     <label class="trap" aria-hidden="true">Leave this blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
     <label class="tick"><input type="checkbox" name="guardian" required><span>I'm this rider's parent or guardian, and it's OK to set up their page.</span></label>
     <p class="problem" id="problem" role="alert"></p>
-    <button class="btn" type="submit" id="send">Send it to Kam</button>
+    <button class="btn" type="submit" id="send">Send it to Moto Tools</button>
     <p class="fine">We use this only to set up your rider's page. Rides stay private to your family. <a href="../privacy/">Privacy</a></p>
   </form>
 
@@ -144,7 +145,7 @@
     <a class="btn" href="../" style="width:auto">Back to Moto Tools</a>
   </section>
 
-  <noscript><p class="problem">This form needs JavaScript. Or just text Kam your rider's name, number and bike.</p></noscript>
+  <noscript><p class="problem">This form needs JavaScript. Or just text us your rider's name, number and bike size.</p></noscript>
   <footer>Moto Tools · <a href="../">mototoolsmx.com</a></footer>
 </div>
 
@@ -163,11 +164,11 @@
       <label>First name<input type="text" data-f="first" maxlength="30" autocomplete="off" required></label>
       <label>Last name<input type="text" data-f="last" maxlength="30" autocomplete="off"></label>
     </div>
-    <div class="third">
-      <label>Bike <small>Like KTM 65 SX</small><input type="text" data-f="bike" maxlength="40" autocomplete="off"></label>
-      <label>Race number<input type="text" data-f="number" maxlength="4" inputmode="numeric" autocomplete="off" placeholder="72"></label>
+    <div class="two">
+      <label>Bike make<select data-f="make"><option value="">Pick one</option><option>KTM</option><option>Husqvarna</option><option>GasGas</option><option>Yamaha</option><option>Honda</option><option>Kawasaki</option><option>Suzuki</option><option>Cobra</option><option>Stacyc</option><option>Something else</option></select></label>
+      <label>Bike size<select data-f="size"><option value="">Pick one</option><option>50cc</option><option>65cc</option><option>85cc</option><option>Supermini</option><option>125cc</option><option>250cc</option><option>450cc</option><option>Electric</option><option>Something else</option></select></label>
     </div>
-    <label>Class <small>Optional. Like 65cc 7-9.</small><input type="text" data-f="cls" maxlength="30" autocomplete="off"></label>
+    <label>Race number<input type="text" data-f="number" maxlength="4" inputmode="numeric" autocomplete="off" placeholder="72"></label>
     <div class="label">Plate color<div class="swatches" data-c="main"></div></div>
     <div class="label">Second color<div class="swatches" data-c="accent"></div></div>
   </div>
@@ -231,10 +232,10 @@
     for (var i = 0; i < cards.length; i++) {
       var card = cards[i];
       riders.push({ first: field(card, 'first').value.trim(), last: field(card, 'last').value.trim(), number: field(card, 'number').value.trim(),
-        bike: field(card, 'bike').value.trim(), cls: field(card, 'cls').value.trim(), main: color(card, 'main'), accent: color(card, 'accent') });
+        bike: [field(card, 'make').value, field(card, 'size').value].filter(Boolean).join(' '), cls: '', main: color(card, 'main'), accent: color(card, 'accent') });
     }
     return { parent: value('parent'), phone: value('phone'), email: value('email'), email2: value('email2'), phoneKind: value('phoneKind'),
-      riders: riders, box: value('box'), track: value('track'), note: value('note'), guardian: form.elements.guardian.checked, website: value('website') };
+      riders: riders, box: value('box'), track: value('track'), note: value('note'), social: value('social'), guardian: form.elements.guardian.checked, website: value('website') };
   }
   // The same checks the server makes, said next to the field, so nobody waits to find out.
   function check(data) {
@@ -255,7 +256,7 @@
     var data = gather();
     if (check(data) !== true) return;
     problem.textContent = ''; send.disabled = true; send.textContent = 'Sending…';
-    var back = function (words) { send.disabled = false; send.textContent = 'Send it to Kam'; say(words); };
+    var back = function (words) { send.disabled = false; send.textContent = 'Send it to Moto Tools'; say(words); };
     // Plain text holding JSON: a browser sends that to another address without a pre-check, so it works everywhere.
     fetch(API + '/api/setup-request', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
       .then(function (answer) { return answer.json().catch(function () { return {}; }).then(function (body) { return { ok: answer.ok, body: body }; }); })
