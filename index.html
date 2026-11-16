@@ -84,7 +84,7 @@
   .gallery > p { color: var(--muted); text-align: center; margin: 0 auto 28px; max-width: 560px; }
   .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
   .shots figure { margin: 0; }
-  .shots img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); background: #111316; }
+  .shots img, .shots video { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); background: #111316; }
   .shots figcaption { margin-top: 10px; color: var(--muted); font-size: 16px; }
   .shots figcaption b { color: var(--ink); font-weight: 500; }
   .btn.ghost { background: transparent; color: var(--ink); border: 2px solid var(--line); margin-left: 8px; }
@@ -149,6 +149,16 @@
       </ul>
     </section>
 
+    <section class="gallery how">
+      <h2>How it works</h2>
+      <p>A GPS box on the bike and an app on your phone. That's the whole kit.</p>
+      <div class="shots">
+        <figure><video src="img/setup/box-tank.mp4" poster="img/setup/box-tank.jpg" width="720" height="1280" autoplay muted loop playsinline preload="metadata" aria-label="A small GPS box being pressed onto Velcro in front of the tank of a dirt bike"></video><figcaption><b>1. Stick the box on the bike.</b> A small GPS box on Velcro. No wires.</figcaption></figure>
+        <figure><img src="img/how-ride.jpg" alt="A young rider on a practice track at sunset" width="720" height="1280" loading="lazy"><figcaption><b>2. Ride.</b> Practice or race day. The box records the whole session.</figcaption></figure>
+        <figure><img src="img/how-phone.jpg" alt="A phone showing a lap on the track map, colored by speed" width="720" height="1280" loading="lazy"><figcaption><b>3. See it on your phone.</b> Every lap, start and turn, in plain English.</figcaption></figure>
+      </div>
+    </section>
+
     <section class="gallery">
       <h2>From a real race day</h2>
       <p>Dannyn Reed #44 at Mesquite MX, Nov 7. Everything below came off the GPS box on his bike, and his laps matched official timing within 0.1 s.</p>
@@ -180,8 +190,8 @@
 
     <section class="join" id="join">
       <h2>Get on the list</h2>
-      <p>I'm Kam, a race dad and former bike shop owner. I built Moto Tools for my own son's practice. We're close to opening the app for beta. Sign up and I'll reach out when it's ready.</p>
-      <p class="fine">Works with a Dragy or RaceBox GPS box in the bar pad. No box yet? Sign up anyway.</p>
+      <p>I'm Kam, a race dad and former bike shop owner. I built Moto Tools for my own son's practice. The iPhone app is in testing with families right now. Sign up and I'll reach out.</p>
+      <p class="fine">Works with a Dragy or RaceBox GPS box on the bike. No box yet? Sign up anyway.</p>
       <form class="signup" id="signup">
         <label>Your name<input name="name" autocomplete="name" required></label>
         <label>I'm a<select name="who">
