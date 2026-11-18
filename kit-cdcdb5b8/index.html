@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Moto Tools Post Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0c0f;--card:#16181d;--line:#2a2d34;--ink:#f5f3ee;--dim:#a9abb2;--or:#f26b1d;--ok:#3fb56b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.45 Barlow,system-ui,sans-serif;-webkit-text-size-adjust:100%}
+main{max-width:560px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+header img{height:44px}
+h1,h2,h3,.btn,.chip,.day{font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.02em}
+h1{font-size:30px;font-weight:800;margin:0}
+.sub{color:var(--dim);margin:0 0 22px}
+h2{font-size:20px;font-weight:800;color:var(--dim);margin:30px 0 10px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:16px}
+.card.today{border-color:var(--or)}
+.card.done{opacity:.6}
+.day{font-size:18px;font-weight:800;color:var(--or)}
+h3{font-size:30px;font-weight:800;margin:2px 0 8px;line-height:1.05}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{font-size:15px;font-weight:600;padding:3px 10px;border-radius:99px;border:1px solid var(--line);color:var(--dim)}
+.media{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px 14px;padding:0 16px}
+.media img,.media video{height:300px;border-radius:12px;scroll-snap-align:center;background:#000;flex:none}
+ol{margin:0 0 14px;padding-left:22px}
+ol li{margin-bottom:5px}
+.btn{display:block;width:100%;min-height:54px;border-radius:14px;border:0;font-size:22px;font-weight:800;margin-top:10px;cursor:pointer;color:#0b0c0f;background:var(--or)}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.btn.ok{background:var(--ok)}
+.btn:disabled{opacity:.6}
+details{margin-top:10px}
+summary{color:var(--dim);cursor:pointer;padding:6px 0}
+pre{white-space:pre-wrap;font:inherit;font-size:15px;color:var(--dim);background:#0f1014;border-radius:10px;padding:12px;margin:6px 0 0}
+.empty{color:var(--dim);padding:8px 0 4px}
+.note{color:var(--dim);font-size:15px;margin-top:8px}
+</style>
+</head>
+<body>
+<main>
+<header><img src="../img/wordmark.png" alt="Moto Tools"><h1>Post kit</h1></header>
+<p class="sub">Today's post, ready to go. Save it, copy the caption, post it.</p>
+<div id="app"></div>
+<h2>Quick replies</h2>
+<div class="card" id="replies"></div>
+</main>
+<script>
+const POSTS = [{"date": "2026-11-19", "title": "4 things it shows you", "type": "Carousel", "where": ["Instagram", "TikTok"], "steps": ["Save the 6 slides to your photos.", "Instagram: new post, pick all 6 in order (1 to 6).", "Paste the Instagram caption. Share.", "TikTok: new photo post, same 6 slides, paste the TikTok caption."], "captions": {"Instagram": "4 things Moto Tools shows you after every ride 👇\n\n1. Laps. Every lap timed, the quickest one marked, on a map of the track.\n2. Starts. Gate to 30, 60, 100 and 200 feet. Every launch, timed.\n3. Turns. The turn where the time is, in plain English.\n4. Photos. Any photo you take is matched to the ride and overlaid with your lap, time and speed.\n\nSave this for your next practice day.\n\nmototoolsmx.com\n\n#motocross #mxparents #dirtbike #mototools", "TikTok": "4 things your moto ride shows you: laps, starts, turns and photos with your numbers on them. Save this for practice day. #motocross #mxparents #dirtbike #mototools"}, "urls": ["f/2026-11-19-4-things-it-shows-you-1.jpg", "f/2026-11-19-4-things-it-shows-you-2.jpg", "f/2026-11-19-4-things-it-shows-you-3.jpg", "f/2026-11-19-4-things-it-shows-you-4.jpg", "f/2026-11-19-4-things-it-shows-you-5.jpg", "f/2026-11-19-4-things-it-shows-you-6.jpg"]}, {"date": "2026-11-23", "title": "Mesquite story: John", "type": "Story", "where": ["Instagram"], "steps": ["Save the video to your photos.", "Instagram: new story, pick the video.", "Optional: add a link sticker to mototoolsmx.com.", "Share to Your Story. No caption needed."], "captions": {}, "urls": ["f/2026-11-23-mesquite-story-john-1.mp4"]}];
+const REPLIES = [
+  ["Someone asks how to get it", "Thanks! Here's the 2 minute setup: mototoolsmx.com/start"],
+  ["Someone asks what it is", "It's a small GPS box on the bike and an app on your phone. It shows every lap, start and turn after you ride."],
+  ["Someone asks the price", "We haven't set the price yet. Right now we're building it with families."]
+];
+const $ = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+const pad = n => String(n).padStart(2, "0"), now = new Date();
+const TODAY = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+const fmt = d => new Date(d + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" });
+const store = { get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { v ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch (e) {} } };
+const cache = {};
+async function files(p) {
+  if (!cache[p.date + p.title]) cache[p.date + p.title] = Promise.all(p.urls.map(async u => { const b = await (await fetch(u)).blob(); return new File([b], u.split("/").pop(), { type: b.type }); }));
+  return cache[p.date + p.title];
+}
+function flash(b, t) { const o = b.dataset.label; b.textContent = t; setTimeout(() => b.textContent = o, 1800); }
+async function copy(b, text) {
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) { const t = $("textarea"); t.value = text; document.body.append(t); t.select(); document.execCommand("copy"); t.remove(); }
+  flash(b, "Copied");
+}
+function saveBtn(p) {
+  const many = p.urls.length > 1, vid = /\.mp4$/.test(p.urls[0]);
+  const label = vid ? "Save the video" : many ? `Save the ${p.urls.length} slides` : "Save the photo";
+  const b = $("button", "btn", label); b.dataset.label = label; let ready = null;
+  const prep = async () => { b.disabled = true; b.textContent = "Getting it ready…"; try { ready = await files(p); } catch (e) { ready = null; } b.disabled = false; b.textContent = label; };
+  b.onclick = async () => {
+    if (!ready) { await prep(); if (ready) { b.textContent = "Ready. Tap again to save"; } return; }
+    if (navigator.canShare && navigator.canShare({ files: ready })) { try { await navigator.share({ files: ready }); } catch (e) {} b.textContent = label; }
+    else { p.urls.forEach(u => { const a = $("a"); a.href = u; a.download = u.split("/").pop(); document.body.append(a); a.click(); a.remove(); }); flash(b, "Saved to downloads"); }
+  };
+  b.prep = prep; return b;
+}
+function card(p, isToday) {
+  const key = "posted:" + p.date + ":" + p.title, c = $("div", "card" + (isToday ? " today" : ""));
+  c.append($("div", "day", (isToday ? "Today · " : "") + fmt(p.date)), $("h3", "", p.title));
+  const ch = $("div", "chips"); [p.type, ...p.where].forEach(x => ch.append($("span", "chip", x))); c.append(ch);
+  const m = $("div", "media");
+  p.urls.forEach(u => { if (/\.mp4$/.test(u)) { const v = $("video"); v.src = u; v.controls = true; v.playsInline = true; v.preload = "metadata"; m.append(v); } else { const i = $("img"); i.src = u; i.loading = "lazy"; i.alt = ""; m.append(i); } });
+  c.append(m);
+  const ol = $("ol"); p.steps.forEach(s => ol.append($("li", "", s))); c.append(ol);
+  const sb = saveBtn(p); c.append(sb); if (isToday) sb.prep();
+  for (const [name, text] of Object.entries(p.captions)) {
+    const b = $("button", "btn ghost", `Copy ${name} caption`); b.dataset.label = b.textContent; b.onclick = () => copy(b, text); c.append(b);
+    const d = $("details"); d.append($("summary", "", `See the ${name} caption`), $("pre", "", text)); c.append(d);
+  }
+  if (!Object.keys(p.captions).length) c.append($("div", "note", "No caption for this one."));
+  const done = $("button", "btn ghost");
+  const paint = () => { const on = !!store.get(key); done.textContent = on ? "Posted ✓" : "Mark as posted"; done.className = "btn " + (on ? "ok" : "ghost"); c.classList.toggle("done", on); };
+  done.onclick = () => { store.set(key, store.get(key) ? "" : "1"); paint(); }; paint(); c.append(done);
+  return c;
+}
+const app = document.getElementById("app"), sorted = [...POSTS].sort((a, b) => a.date.localeCompare(b.date));
+const today = sorted.filter(p => p.date === TODAY), next = sorted.filter(p => p.date > TODAY), past = sorted.filter(p => p.date < TODAY).reverse();
+app.append($("h2", "", "Today"));
+if (today.length) today.forEach(p => app.append(card(p, true))); else app.append($("div", "empty", "Nothing to post today."));
+if (next.length) { app.append($("h2", "", "Coming up")); next.forEach(p => app.append(card(p, false))); }
+if (past.length) { const d = $("details"); d.append($("summary", "", `Earlier posts (${past.length})`)); past.forEach(p => d.append(card(p, false))); app.append(d); }
+const r = document.getElementById("replies");
+REPLIES.forEach(([q, a]) => { r.append($("div", "day", q), $("pre", "", a)); const b = $("button", "btn ghost", "Copy reply"); b.dataset.label = "Copy reply"; b.onclick = () => copy(b, a); r.append(b, $("div", "note", " ")); });
+</script>
+</body>
+</html>
