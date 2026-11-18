@@ -36,6 +36,7 @@ ol li{margin-bottom:5px}
 details{margin-top:10px}
 summary{color:var(--dim);cursor:pointer;padding:6px 0}
 pre{white-space:pre-wrap;font:inherit;font-size:15px;color:var(--dim);background:#0f1014;border-radius:10px;padding:12px;margin:6px 0 0}
+.auto{font-weight:600;color:var(--ok);padding:4px 0}
 .empty{color:var(--dim);padding:8px 0 4px}
 .note{color:var(--dim);font-size:15px;margin-top:8px}
 </style>
@@ -49,7 +50,7 @@ pre{white-space:pre-wrap;font:inherit;font-size:15px;color:var(--dim);background
 <div class="card" id="replies"></div>
 </main>
 <script>
-const POSTS = [{"date": "2026-11-19", "title": "4 things it shows you", "type": "Carousel", "where": ["Instagram", "TikTok"], "steps": ["Save the 6 slides to your photos.", "Instagram: new post, pick all 6 in order (1 to 6).", "Paste the Instagram caption. Share.", "TikTok: new photo post, same 6 slides, paste the TikTok caption."], "captions": {"Instagram": "4 things Moto Tools shows you after every ride 👇\n\n1. Laps. Every lap timed, the quickest one marked, on a map of the track.\n2. Starts. Gate to 30, 60, 100 and 200 feet. Every launch, timed.\n3. Turns. The turn where the time is, in plain English.\n4. Photos. Any photo you take is matched to the ride and overlaid with your lap, time and speed.\n\nSave this for your next practice day.\n\nmototoolsmx.com\n\n#motocross #mxparents #dirtbike #mototools", "TikTok": "4 things your moto ride shows you: laps, starts, turns and photos with your numbers on them. Save this for practice day. #motocross #mxparents #dirtbike #mototools"}, "urls": ["f/2026-11-19-4-things-it-shows-you-1.jpg", "f/2026-11-19-4-things-it-shows-you-2.jpg", "f/2026-11-19-4-things-it-shows-you-3.jpg", "f/2026-11-19-4-things-it-shows-you-4.jpg", "f/2026-11-19-4-things-it-shows-you-5.jpg", "f/2026-11-19-4-things-it-shows-you-6.jpg"]}, {"date": "2026-11-23", "title": "Mesquite story: John", "type": "Story", "where": ["Instagram"], "steps": ["Save the video to your photos.", "Instagram: new story, pick the video.", "Optional: add a link sticker to mototoolsmx.com.", "Share to Your Story. No caption needed."], "captions": {}, "urls": ["f/2026-11-23-mesquite-story-john-1.mp4"]}];
+const POSTS = [{"date": "2026-11-19", "title": "4 things it shows you", "type": "Carousel", "where": ["Instagram", "TikTok"], "steps": ["Save the 6 slides to your photos.", "Instagram: new post, pick all 6 in order (1 to 6).", "Paste the Instagram caption. Share.", "TikTok: new photo post, same 6 slides, paste the TikTok caption."], "captions": {"Instagram": "4 things Moto Tools shows you after every ride 👇\n\n1. Laps. Every lap timed, the quickest one marked, on a map of the track.\n2. Starts. Gate to 30, 60, 100 and 200 feet. Every launch, timed.\n3. Turns. The turn where the time is, in plain English.\n4. Photos. Any photo you take is matched to the ride and overlaid with your lap, time and speed.\n\nSave this for your next practice day.\n\nmototoolsmx.com\n\n#motocross #mxparents #dirtbike #mototools", "TikTok": "4 things your moto ride shows you: laps, starts, turns and photos with your numbers on them. Save this for practice day. #motocross #mxparents #dirtbike #mototools"}, "auto": true, "urls": ["f/2026-11-19-4-things-it-shows-you-1.jpg", "f/2026-11-19-4-things-it-shows-you-2.jpg", "f/2026-11-19-4-things-it-shows-you-3.jpg", "f/2026-11-19-4-things-it-shows-you-4.jpg", "f/2026-11-19-4-things-it-shows-you-5.jpg", "f/2026-11-19-4-things-it-shows-you-6.jpg"]}, {"date": "2026-11-23", "title": "Mesquite story: John", "type": "Story", "where": ["Instagram"], "steps": ["Save the video to your photos.", "Instagram: new story, pick the video.", "Optional: add a link sticker to mototoolsmx.com.", "Share to Your Story. No caption needed."], "captions": {}, "auto": true, "urls": ["f/2026-11-23-mesquite-story-john-1.mp4"]}];
 const REPLIES = [
   ["Someone asks how to get it", "Thanks! Here's the 2 minute setup: mototoolsmx.com/start"],
   ["Someone asks what it is", "It's a small GPS box on the bike and an app on your phone. It shows every lap, start and turn after you ride."],
@@ -90,6 +91,7 @@ function card(p, isToday) {
   const m = $("div", "media");
   p.urls.forEach(u => { if (/\.mp4$/.test(u)) { const v = $("video"); v.src = u; v.controls = true; v.playsInline = true; v.preload = "metadata"; m.append(v); } else { const i = $("img"); i.src = u; i.loading = "lazy"; i.alt = ""; m.append(i); } });
   c.append(m);
+  if (p.auto) { c.append($("div", "auto", "This one posts by itself. Nothing to do.")); return c; }
   const ol = $("ol"); p.steps.forEach(s => ol.append($("li", "", s))); c.append(ol);
   const sb = saveBtn(p); c.append(sb); if (isToday) sb.prep();
   for (const [name, text] of Object.entries(p.captions)) {
@@ -103,7 +105,7 @@ function card(p, isToday) {
   return c;
 }
 const app = document.getElementById("app"), sorted = [...POSTS].sort((a, b) => a.date.localeCompare(b.date));
-const today = sorted.filter(p => p.date === TODAY), next = sorted.filter(p => p.date > TODAY), past = sorted.filter(p => p.date < TODAY).reverse();
+const today = sorted.filter(p => p.date === TODAY && !p.auto), next = sorted.filter(p => p.date > TODAY || (p.date === TODAY && p.auto)), past = sorted.filter(p => p.date < TODAY).reverse();
 app.append($("h2", "", "Today"));
 if (today.length) today.forEach(p => app.append(card(p, true))); else app.append($("div", "empty", "Nothing to post today."));
 if (next.length) { app.append($("h2", "", "Coming up")); next.forEach(p => app.append(card(p, false))); }
