@@ -81,6 +81,8 @@
   .sent h2 { font: italic 800 38px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; margin: 0; }
   .sent ol { text-align: left; margin: 0; padding-left: 22px; display: grid; gap: 8px; color: var(--muted); max-width: 26em; }
   .sent ol b { color: var(--ink); font-weight: 500; }
+  .sent .email { color: var(--ink); font-weight: 600; overflow-wrap: anywhere; }
+  .check.wait { background: rgba(242, 107, 29, .16); color: var(--orange); }
   .check { width: 62px; height: 62px; border-radius: 50%; background: rgba(95, 211, 141, .16); color: var(--good); display: grid; place-items: center; font-size: 34px; }
   footer { color: var(--muted); font-size: 14px; text-align: center; padding-top: 28px; }
   [hidden] { display: none !important; }
@@ -158,6 +160,23 @@
     <a class="btn" href="../" style="width:auto">Back to Moto Tools</a>
   </section>
 
+  <!-- Signed up in the pit (?event=), page made on the spot: get the app and sign in. -->
+  <section class="sent" id="made" hidden tabindex="-1">
+    <div class="check" aria-hidden="true">✓</div>
+    <h2 id="madeLine"></h2>
+    <a class="btn" href="https://testflight.apple.com/join/YKswYPvx">Get the app</a>
+    <p class="sub">Open the app and sign in with <b class="email" id="madeEmail"></b>.</p>
+    <p class="fine">No GPS box yet? Find us in the pit.</p>
+  </section>
+
+  <!-- Signed up in the pit, waiting for Kam to tap Connect. Flips to "made" by itself. -->
+  <section class="sent" id="held" hidden tabindex="-1">
+    <div class="check wait" aria-hidden="true">…</div>
+    <h2>Almost there</h2>
+    <p class="sub" id="heldLine">Show this screen to Kam in our pit.</p>
+    <button class="btn" type="button" id="heldAgain" hidden style="width:auto">Check again</button>
+  </section>
+
   <noscript><p class="problem">This form needs JavaScript. Or just text us your rider's name, number and bike size.</p></noscript>
   <footer>Moto Tools · <a href="../">mototoolsmx.com</a></footer>
 </div>
@@ -197,6 +216,8 @@
   var COLORS = [['#F26B1D', 'Orange'], ['#E01E26', 'Red'], ['#1C5FD4', 'Blue'], ['#1FA84A', 'Green'], ['#F4C430', 'Yellow'], ['#7B2FBE', 'Purple'], ['#F5F3EE', 'White'], ['#141414', 'Black']];
   var form = document.getElementById('setup'), list = document.getElementById('riders'), add = document.getElementById('addRider');
   var problem = document.getElementById('problem'), send = document.getElementById('send'), count = 0;
+  // Signed up in the pit: /pit sends people to /start/?event=mesquite. No event, no change.
+  var pitEvent = (new URLSearchParams(location.search).get('event') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
 
   function light(hex) { var n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 > 150; }
   function swatches(box, group, picked) {
@@ -275,17 +296,57 @@
     problem.textContent = ''; send.disabled = true; send.textContent = 'Sending…';
     var back = function (words) { send.disabled = false; send.textContent = 'Send it to Moto Tools'; say(words); };
     // Plain text holding JSON: a browser sends that to another address without a pre-check, so it works everywhere.
+    if (pitEvent) data.event = pitEvent;
     fetch(API + '/api/setup-request', { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(data) })
       .then(function (answer) { return answer.json().catch(function () { return {}; }).then(function (body) { return { ok: answer.ok, body: body }; }); })
       .then(function (got) {
         if (!got.ok) return back(got.body.error || 'That didn\'t go through. Try again in a minute.');
-        var names = data.riders.map(function (one) { return one.first; });
-        var who = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : names[0];
-        document.getElementById('sentLine').textContent = 'Thanks, ' + data.parent.split(' ')[0] + '. We have what we need to set up ' + who + '.';
-        form.hidden = true; var sent = document.getElementById('sent'); sent.hidden = false; sent.focus(); window.scrollTo(0, 0);
+        var typed = data.riders.map(function (one) { return one.first; });
+        if (got.body.result === 'made') return made(got.body.riders, typed, data.email);
+        if (got.body.result === 'held' && got.body.ticket) return held(got.body.ticket, typed, data);
+        thanks(data, typed);
       })
       .catch(function () { back('Couldn\'t reach Moto Tools. Check your signal and try again.'); });
   });
+
+  function both(names) { return names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : names[0]; }
+  function show(id) {
+    form.hidden = true;
+    ['sent', 'made', 'held'].forEach(function (one) { document.getElementById(one).hidden = one !== id; });
+    document.getElementById(id).focus(); window.scrollTo(0, 0);
+  }
+  function thanks(data, typed) {
+    document.getElementById('sentLine').textContent = 'Thanks, ' + data.parent.split(' ')[0] + '. We have what we need to set up ' + both(typed) + '.';
+    show('sent');
+  }
+  // The server gives first names only. If it gives none, the names they typed.
+  function made(riders, typed, email) {
+    var names = Array.isArray(riders) && riders.length ? riders.map(String) : typed;
+    document.getElementById('madeLine').textContent = names.length > 1 ? both(names) + '’s pages are ready.' : names[0] + '’s page is ready.';
+    document.getElementById('madeEmail').textContent = email;
+    show('made');
+  }
+  // Held for Kam: ask every 5 seconds until he taps Connect, for about 30 minutes, then a button to ask again.
+  function held(ticket, typed, data) {
+    var line = document.getElementById('heldLine'), again = document.getElementById('heldAgain'), timer = 0, until = 0;
+    show('held');
+    function ask() {
+      fetch(API + '/api/setup-request/status?ticket=' + encodeURIComponent(ticket))
+        .then(function (answer) { return answer.ok ? answer.json() : {}; })
+        .catch(function () { return {}; })
+        .then(function (body) {
+          if (body.result === 'made') { clearInterval(timer); return made(body.riders, typed, data.email); }
+          if (body.result === 'sent') { clearInterval(timer); return thanks(data, typed); }
+          if (Date.now() > until) { clearInterval(timer); line.textContent = 'Find Kam in our pit, then tap Check again.'; again.hidden = false; }
+        });
+    }
+    function start() {
+      line.textContent = 'Show this screen to Kam in our pit.'; again.hidden = true;
+      until = Date.now() + 30 * 60000; clearInterval(timer); timer = setInterval(ask, 5000);
+    }
+    again.onclick = function () { start(); ask(); };
+    start();
+  }
 })();
 </script>
 </body>
