@@ -139,8 +139,9 @@
 
     <fieldset>
       <legend>Riding</legend>
-      <label>GPS box<select name="box">
-        <option>Not yet</option><option>Dragy Lite</option><option>Dragy Pro</option><option>RaceBox Micro</option><option>Something else</option>
+      <!-- Same question as the home page (Kam, Nov 20: nobody picks the Pro off a list). The values sent stay ones the server knows. -->
+      <label>Do you have a GPS box yet? <small>We recommend the Dragy Lite. No box yet is fine.</small><select name="box">
+        <option value="Not yet">Not yet</option><option value="Dragy Lite">Yes, a Dragy Lite</option><option value="Something else">Yes, something else</option>
       </select></label>
       <label>Where you ride most <small>Optional.</small><input type="text" name="track" maxlength="60" placeholder="Track name"></label>
       <label>Instagram or other social handles <small>Optional. So we can tag your rider.</small><input type="text" name="social" maxlength="80" autocomplete="off" autocapitalize="off" placeholder="@yourrider"></label>
