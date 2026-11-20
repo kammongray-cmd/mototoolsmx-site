@@ -71,6 +71,7 @@
   .btn[disabled] { opacity: .6; cursor: default; }
   .ghost { background: transparent; color: var(--ink); border: 2px dashed var(--line); font-size: 18px; min-height: 50px; padding: 12px; }
   .tick { display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-size: 17px; cursor: pointer; }
+  .ticks { display: grid; gap: 14px; }
   .tick input { width: 26px; height: 26px; margin: 1px 0 0; accent-color: var(--orange); flex: none; }
   .fine { color: var(--muted); font-size: 15px; margin: 0; text-align: center; }
   .problem { color: var(--bad); font-weight: 500; margin: 0; text-align: center; min-height: 1.5em; }
@@ -85,6 +86,11 @@
   .check.wait { background: rgba(242, 107, 29, .16); color: var(--orange); }
   .check { width: 62px; height: 62px; border-radius: 50%; background: rgba(95, 211, 141, .16); color: var(--good); display: grid; place-items: center; font-size: 34px; }
   footer { color: var(--muted); font-size: 14px; text-align: center; padding-top: 28px; }
+  /* Once it's sent, the answer fits on one phone screen: just the logo over it (Kam, Nov 19). */
+  .done header h1, .done header .sub, .done header .steps { display: none; }
+  .done header { padding-top: 20px; }
+  .done header img { max-width: 180px; }
+  .done .sent { margin-top: 16px; }
   [hidden] { display: none !important; }
   @media (max-width: 420px) { .two, .third { grid-template-columns: 1fr; } .plate { width: 84px; } }
 </style>
@@ -94,15 +100,15 @@
   <header>
     <a href="../"><img src="../img/wordmark.png" alt="Moto Tools"></a>
     <h1>Set up your rider</h1>
-    <p class="sub">Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started.</p>
-    <ol class="steps"><li><b>1</b>You fill this out</li><li><b>2</b>We build the page</li><li><b>3</b>We text your links</li></ol>
+    <p class="sub" id="sub">Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started.</p>
+    <ol class="steps" id="steps"><li><b>1</b>You fill this out</li><li><b>2</b>We build the page</li><li><b>3</b>We text your links</li></ol>
   </header>
 
   <form id="setup" novalidate>
     <fieldset>
       <legend>You</legend>
       <label>Your name<input type="text" name="parent" autocomplete="name" maxlength="60" required></label>
-      <label>Cell phone <small>We text your links here.</small><input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="30" required></label>
+      <label>Cell phone <small id="phoneHint">We text your links here.</small><input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="30" required></label>
       <label>Email <small>This is how you sign in. We email a code, so there's no password.</small><input type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254" required></label>
       <div class="label">Your phone
         <div class="picks" role="radiogroup" aria-label="Your phone">
@@ -142,7 +148,10 @@
     </fieldset>
 
     <label class="trap" aria-hidden="true">Leave this blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
-    <label class="tick"><input type="checkbox" name="guardian" required><span>I'm this rider's parent or guardian, and it's OK to set up their page.</span></label>
+    <div class="ticks">
+      <label class="tick"><input type="radio" name="who" value="guardian"><span>I'm this rider's parent or guardian, and it's OK to set up their page.</span></label>
+      <label class="tick"><input type="radio" name="who" value="self"><span>I'm the rider, 18 or older.</span></label>
+    </div>
     <p class="problem" id="problem" role="alert"></p>
     <button class="btn" type="submit" id="send">Send it to Moto Tools</button>
     <p class="fine">We use this only to set up your rider's page. Rides stay private to your family. <a href="../privacy/">Privacy</a></p>
@@ -218,6 +227,12 @@
   var problem = document.getElementById('problem'), send = document.getElementById('send'), count = 0;
   // Signed up in the pit: /pit sends people to /start/?event=mesquite. No event, no change.
   var pitEvent = (new URLSearchParams(location.search).get('event') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
+  // In the pit the page is made on the spot and nothing gets texted (Kam's pit try, Nov 19), so say what really happens.
+  if (pitEvent) {
+    document.getElementById('sub').textContent = "Two minutes. Tell us who's riding and their page is ready right away.";
+    document.getElementById('steps').innerHTML = '<li><b>1</b>You fill this out</li><li><b>2</b>Get the app</li><li><b>3</b>Sign in with your email</li>';
+    document.getElementById('phoneHint').textContent = 'In case we need to reach you.';
+  }
 
   function light(hex) { var n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 > 150; }
   function swatches(box, group, picked) {
@@ -269,7 +284,7 @@
         bike: [field(card, 'make').value, field(card, 'size').value].filter(Boolean).join(' '), cls: '', main: color(card, 'main'), accent: color(card, 'accent') });
     }
     return { parent: value('parent'), phone: value('phone'), email: value('email'), email2: value('email2'), phoneKind: value('phoneKind'),
-      riders: riders, box: value('box'), track: value('track'), note: value('note'), social: value('social'), ship: { street: value('street'), city: value('city'), state: value('state'), zip: value('zip') }, guardian: form.elements.guardian.checked, website: value('website') };
+      riders: riders, box: value('box'), track: value('track'), note: value('note'), social: value('social'), ship: { street: value('street'), city: value('city'), state: value('state'), zip: value('zip') }, guardian: value('who') === 'guardian', self: value('who') === 'self', website: value('website') };
   }
   // The same checks the server makes, said next to the field, so nobody waits to find out.
   function check(data) {
@@ -286,7 +301,7 @@
       if (!data.riders[i].first) return say('Add your rider\'s first name.', field(cards[i], 'first'));
       if (data.riders[i].number && !/^#?\d{1,3}[a-z]?$/i.test(data.riders[i].number)) return say('A race number is up to 3 digits, like 72 or 7A. Or leave it blank.', field(cards[i], 'number'));
     }
-    if (!data.guardian) return say('Tick the box to say you\'re the rider\'s parent or guardian.', form.elements.guardian);
+    if (!data.guardian && !data.self) return say('Tick one: you\'re the rider\'s parent or guardian, or the rider (18 or older).', form.querySelector('input[name=who]'));
     return true;
   }
   form.addEventListener('submit', function (event) {
@@ -313,6 +328,7 @@
   function show(id) {
     form.hidden = true;
     ['sent', 'made', 'held'].forEach(function (one) { document.getElementById(one).hidden = one !== id; });
+    document.body.classList.add('done');
     document.getElementById(id).focus(); window.scrollTo(0, 0);
   }
   function thanks(data, typed) {
