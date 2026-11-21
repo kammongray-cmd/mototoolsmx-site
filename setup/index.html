@@ -46,6 +46,9 @@
   .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .pair figure { margin-top: 6px; }
   .tip { border-left: 3px solid var(--orange); background: rgba(242, 107, 29, .1); border-radius: 0 10px 10px 0; padding: 12px 14px; margin: 14px 0 4px; font-size: 17px; }
+  .lights { list-style: none; margin: 6px 0 10px 46px; padding: 0; display: grid; gap: 8px; font-size: 17px; }
+  .lights b { display: block; font-weight: 600; }
+  .l-red { color: #ff6b6b; } .l-blue { color: #6bb1ff; } .l-orange { color: var(--orange); }
   .tip b { text-transform: uppercase; font: 800 17px 'Barlow Condensed', sans-serif; letter-spacing: .06em; color: var(--orange); display: block; }
   h3 { font: 800 22px/1.1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .03em; margin: 22px 0 6px; }
   footer { text-align: center; color: var(--muted); font-size: 15px; margin-top: 28px; }
@@ -60,6 +63,7 @@
   </header>
 
   <nav aria-label="Steps">
+    <a href="#box"><b>0</b>The box</a>
     <a href="#install"><b>1</b>Install</a>
     <a href="#signin"><b>2</b>Sign in</a>
     <a href="#mount"><b>3</b>Mount the box</a>
@@ -67,13 +71,30 @@
     <a href="#ride"><b>5</b>Ride</a>
   </nav>
 
+  <!-- Step 0 (fresh-eyes review, Nov 20): all three newcomers stopped at "turn the box on". Box facts from Kam, Nov 21. -->
+  <section id="box">
+    <div class="num">Step 0</div>
+    <h2>Get the box ready</h2>
+    <p>Do this first, so the box charges while you set up the app.</p>
+    <div class="do"><i>1</i><p><b>Plug it in.</b> The Dragy Lite has no power button. Plugging it in the first time turns it on, and it stays on.</p></div>
+    <div class="do"><i>2</i><p><b>Watch the light.</b> It tells you what the box is doing.</p></div>
+    <ul class="lights">
+      <li><b class="l-red">Red, blinking</b>Charging.</li>
+      <li><b class="l-blue">Blue, every 5 seconds</b>On and waiting for your phone.</li>
+      <li><b class="l-blue">Blue, every 2 seconds</b>Connected to your phone.</li>
+      <li><b class="l-orange">Orange, every 2 seconds</b>Recording.</li>
+    </ul>
+    <div class="do"><i>3</i><p><b>Leave it on the charger until you head to the track.</b> It can't be switched off, and it loses about 3% an hour just sitting.</p></div>
+    <div class="tip"><b>Looking for a code on the box?</b>There isn't one. The app shows the box's code when you connect it in step 4. With one box you never need it. With two, write each code on the back so you can tell them apart.</div>
+  </section>
+
   <section id="install">
     <div class="num">Step 1</div>
     <h2>Install the app</h2>
     <p>The iPhone app is in testing, so for now it comes through Apple's TestFlight app.</p>
     <div class="do"><i>1</i><p>Tap the invite link we sent you.</p></div>
     <div class="do"><i>2</i><p>If it asks, install <b>TestFlight</b> from the App Store. It's free and made by Apple.</p></div>
-    <div class="do"><i>3</i><p>Tap the invite link again, then tap <b>Install</b>. You'll see Moto Tools loading.</p></div>
+    <div class="do"><i>3</i><p>Tap the invite link again, then tap <b>Accept</b> and <b>Install</b>. You'll see Moto Tools loading.</p></div>
     <figure class="shot"><img src="../img/setup/install.jpg" alt="Moto Tools installing in TestFlight" loading="lazy"></figure>
     <div class="tip"><b>Stuck on "Ready To Test"?</b>If you see this screen with a Redeem button, close it and tap our invite link one more time. That takes you straight to Moto Tools.</div>
     <figure class="shot"><img src="../img/setup/redeem.jpg" alt="The Ready To Test screen in TestFlight" loading="lazy"></figure>
@@ -113,12 +134,12 @@
   <section id="connect">
     <div class="num">Step 4</div>
     <h2>Connect the box</h2>
-    <p>You do this once. Turn Bluetooth on in your phone's Settings, turn the box on, and stand next to the bike.</p>
+    <p>You do this once. Turn Bluetooth on in your phone's Settings and stand next to the bike. The box is already on if its light is blinking (step 0).</p>
     <div class="do"><i>1</i><p>On your rider's page, tap the <b>box button</b> at the top.</p></div>
     <figure class="shot"><img src="../img/setup/box-button.jpg" alt="The box button at the top of the rider's page" loading="lazy"></figure>
     <div class="do"><i>2</i><p>It says <b>No box yet</b>. Tap <b>Pick</b> and your rider's name. (The orange <b>How to set up</b> link right under it brings you back to this page.)</p></div>
     <figure class="shot"><img src="../img/setup/no-box-b6.jpg" alt="No box yet, with the Pick button" loading="lazy"></figure>
-    <div class="do"><i>3</i><p>Tap the box whose code matches the sticker on yours.</p></div>
+    <div class="do"><i>3</i><p>Tap your box. With one box nearby, it's the only one on the list.</p></div>
     <figure class="shot"><img src="../img/setup/pick-box-b6.jpg" alt="Pick their box" loading="lazy"></figure>
     <div class="do"><i>4</i><p>Tap <b>Yes, give it</b> to your rider.</p></div>
     <figure class="shot"><img src="../img/setup/give-box-b6.jpg" alt="Give this box to your rider" loading="lazy"></figure>
@@ -132,9 +153,9 @@
   <section id="ride">
     <div class="num">Step 5</div>
     <h2>Ride, then look</h2>
-    <div class="do"><i>1</i><p>In the pits, before the session, tap <b>Start Recording</b>. It's the red button on the box screen.</p></div>
-    <div class="do"><i>2</i><p>Go ride.</p></div>
-    <div class="do"><i>3</i><p>Back at the pit, stop the recording, then open the app next to the box. It saves the ride by itself and it shows up under <b>Days</b>. A long ride can take a few minutes.</p></div>
+    <div class="do"><i>1</i><p>In the pits, before each session, tap <b>Start Recording</b>. It's the red button on the box screen. The light turns orange.</p></div>
+    <div class="do"><i>2</i><p>Go ride. The box records by itself, so the phone doesn't ride on the bike. Keep it in your pocket or leave it in the pit.</p></div>
+    <div class="do"><i>3</i><p>Back at the pit, open the app next to the bike. It finds the box again. Tap <b>Stop Recording</b>. The ride saves and shows up under <b>MY RIDES</b>. A long ride can take a few minutes.</p></div>
     <figure class="shot"><img src="../img/setup/days.jpg" alt="Your rider's days" loading="lazy"></figure>
     <div class="do"><i>4</i><p>Tap the day to see every lap on the map.</p></div>
     <figure class="shot"><img src="../img/setup/lap.jpg" alt="A lap on the map" loading="lazy"></figure>

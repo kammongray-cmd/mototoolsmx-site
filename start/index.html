@@ -72,6 +72,10 @@
   .ghost { background: transparent; color: var(--ink); border: 2px dashed var(--line); font-size: 18px; min-height: 50px; padding: 12px; }
   .tick { display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-size: 17px; cursor: pointer; }
   .ticks { display: grid; gap: 14px; }
+  .ticks-head { font: italic 800 24px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; color: var(--ink); }
+  .ticks-head small { font: 400 15px/1.2 Barlow, sans-serif; text-transform: none; color: var(--muted); margin-left: 6px; }
+  .pit-note { margin: 10px auto 0; max-width: 30em; color: var(--ink); font-size: 17px; }
+  .pit-note small { display: block; color: var(--muted); font-size: 14px; margin-top: 4px; }
   .tick input { width: 26px; height: 26px; margin: 1px 0 0; accent-color: var(--orange); flex: none; }
   .fine { color: var(--muted); font-size: 15px; margin: 0; text-align: center; }
   .problem { color: var(--bad); font-weight: 500; margin: 0; text-align: center; min-height: 1.5em; }
@@ -120,7 +124,7 @@
       <label>Another parent's email <small>Optional. They can sign in too.</small><input type="email" name="email2" autocomplete="off" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254"></label>
     </fieldset>
 
-    <fieldset>
+    <fieldset id="shipBox">
       <legend>Shipping address</legend>
       <p class="ship-why">We mail your GPS box's case here. Only we see it.</p>
       <label>Street<input type="text" name="street" autocomplete="street-address" maxlength="80" required></label>
@@ -140,7 +144,7 @@
     <fieldset>
       <legend>Riding</legend>
       <!-- Same question as the home page (Kam, Nov 20: nobody picks the Pro off a list). The values sent stay ones the server knows. -->
-      <label>Do you have a GPS box yet? <small>We recommend the Dragy Lite. No box yet is fine.</small><select name="box">
+      <label>Do you have a GPS box yet? <small id="boxHint">We recommend the Dragy Lite. No box yet is fine.</small><select name="box">
         <option value="Not yet">Not yet</option><option value="Dragy Lite">Yes, a Dragy Lite</option><option value="Something else">Yes, something else</option>
       </select></label>
       <label>Where you ride most <small>Optional.</small><input type="text" name="track" maxlength="60" placeholder="Track name"></label>
@@ -150,6 +154,7 @@
 
     <label class="trap" aria-hidden="true">Leave this blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
     <div class="ticks">
+      <div class="ticks-head">Who's signing up? <small>Pick one.</small></div>
       <label class="tick"><input type="radio" name="who" value="guardian"><span>I'm this rider's parent or guardian, and it's OK to set up their page.</span></label>
       <label class="tick"><input type="radio" name="who" value="self"><span>I'm the rider, 18 or older.</span></label>
     </div>
@@ -227,12 +232,24 @@
   var form = document.getElementById('setup'), list = document.getElementById('riders'), add = document.getElementById('addRider');
   var problem = document.getElementById('problem'), send = document.getElementById('send'), count = 0;
   // Signed up in the pit: /pit sends people to /start/?event=mesquite. No event, no change.
+  var BUYING = 'Buying one this weekend';
   var pitEvent = (new URLSearchParams(location.search).get('event') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
   // In the pit the page is made on the spot and nothing gets texted (Kam's pit try, Nov 19), so say what really happens.
   if (pitEvent) {
     document.getElementById('sub').textContent = "Two minutes. Tell us who's riding and their page is ready right away.";
     document.getElementById('steps').innerHTML = '<li><b>1</b>You fill this out</li><li><b>2</b>Get the app</li><li><b>3</b>Sign in with your email</li>';
     document.getElementById('phoneHint').textContent = 'In case we need to reach you.';
+    // Fresh-eyes review, Nov 20 (Kam's calls, Nov 21): say where this is and that it's free, don't ask a pit family
+    // for a shipping address, and let them say they want to buy a box this weekend.
+    var names = { mesquite: 'Mesquite MX' }, place = names[pitEvent];
+    var note = document.createElement('p'); note.className = 'pit-note';
+    note.textContent = (place ? place + ' this weekend. ' : '') + "Find us in the pit and we'll put a GPS box on the bike. The app is free during testing.";
+    if (place) { var code = document.createElement('small'); code.textContent = 'Your ' + place + ' code is already in from the QR.'; note.appendChild(code); }
+    document.getElementById('sub').after(note);
+    document.getElementById('shipBox').hidden = true;
+    document.getElementById('boxHint').textContent = "No box yet is fine. We'll have them in the pit.";
+    var buy = document.createElement('option'); buy.value = BUYING; buy.textContent = 'Buying one this weekend';
+    form.elements.box.insertBefore(buy, form.elements.box.options[1]);
   }
 
   function light(hex) { var n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 > 150; }
@@ -284,8 +301,11 @@
       riders.push({ first: field(card, 'first').value.trim(), last: field(card, 'last').value.trim(), number: field(card, 'number').value.trim(),
         bike: [field(card, 'make').value, field(card, 'size').value].filter(Boolean).join(' '), cls: '', main: color(card, 'main'), accent: color(card, 'accent') });
     }
-    return { parent: value('parent'), phone: value('phone'), email: value('email'), email2: value('email2'), phoneKind: value('phoneKind'),
+    var data = { parent: value('parent'), phone: value('phone'), email: value('email'), email2: value('email2'), phoneKind: value('phoneKind'),
       riders: riders, box: value('box'), track: value('track'), note: value('note'), social: value('social'), ship: { street: value('street'), city: value('city'), state: value('state'), zip: value('zip') }, guardian: value('who') === 'guardian', self: value('who') === 'self', website: value('website') };
+    if (pitEvent) delete data.ship;
+    if (data.box === BUYING) data.note = ('Wants to buy a box this weekend. ' + data.note).trim().slice(0, 300);
+    return data;
   }
   // The same checks the server makes, said next to the field, so nobody waits to find out.
   function check(data) {
@@ -293,10 +313,12 @@
     if (data.phone.replace(/\D/g, '').length < 7) return say('Add a cell number we can text.', form.elements.phone);
     if (!/^\S+@\S+\.\S{2,}$/.test(data.email)) return say('Check your email address.', form.elements.email);
     if (data.email2 && !/^\S+@\S+\.\S{2,}$/.test(data.email2)) return say('Check the other parent\'s email, or leave it blank.', form.elements.email2);
+    if (data.ship) {
     if (!data.ship.street) return say('Add the street address we should ship to.', form.elements.street);
     if (!data.ship.city) return say('Add the city.', form.elements.city);
     if (!data.ship.state) return say('Add the state.', form.elements.state);
     if (!/^[A-Za-z0-9][A-Za-z0-9 -]{2,9}$/.test(data.ship.zip)) return say('Add the zip code.', form.elements.zip);
+    }
     var cards = list.querySelectorAll('.rider');
     for (var i = 0; i < data.riders.length; i++) {
       if (!data.riders[i].first) return say('Add your rider\'s first name.', field(cards[i], 'first'));
