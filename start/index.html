@@ -72,8 +72,14 @@
   .ghost { background: transparent; color: var(--ink); border: 2px dashed var(--line); font-size: 18px; min-height: 50px; padding: 12px; }
   .tick { display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-size: 17px; cursor: pointer; }
   .ticks { display: grid; gap: 14px; }
-  .ticks-head { font: italic 800 24px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; color: var(--ink); }
-  .ticks-head small { font: 400 15px/1.2 Barlow, sans-serif; text-transform: none; color: var(--muted); margin-left: 6px; }
+  .tick span b { font-weight: 600; }
+  /* The rider is the one filling this in: their name comes from "Your name", so it isn't asked twice. */
+  .rider.me .names, .rider.me .drop { display: none !important; }
+  .bikes { display: grid; gap: 14px; }
+  .bike, .bike-col { display: grid; gap: 10px; align-content: start; }
+  .bike + .bike { border-top: 1px dashed var(--line); padding-top: 14px; }
+  .text-btn { background: none; border: 0; color: var(--muted); font: 500 15px Barlow, sans-serif; text-decoration: underline; cursor: pointer; padding: 6px 0; justify-self: start; }
+  .add-bike { color: var(--orange); font-size: 16px; text-decoration: none; font-weight: 600; }
   .pit-note { margin: 10px auto 0; max-width: 30em; color: var(--ink); font-size: 17px; }
   .pit-note small { display: block; color: var(--muted); font-size: 14px; margin-top: 4px; }
   .tick input { width: 26px; height: 26px; margin: 1px 0 0; accent-color: var(--orange); flex: none; }
@@ -103,12 +109,21 @@
 <div class="wrap">
   <header>
     <a href="../"><img src="../img/wordmark.png" alt="Moto Tools"></a>
-    <h1>Set up your rider</h1>
+    <h1 id="title">Set up your rider</h1>
     <p class="sub" id="sub">Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started.</p>
     <ol class="steps" id="steps"><li><b>1</b>You fill this out</li><li><b>2</b>We build the page</li><li><b>3</b>We text your links</li></ol>
   </header>
 
   <form id="setup" novalidate>
+    <!-- Asked first (fresh-eyes review, Nov 20; Kam, Nov 21), so the rest of the form can talk to a rider about "your page". -->
+    <fieldset>
+      <legend>Who's riding?</legend>
+      <div class="ticks">
+        <label class="tick"><input type="radio" name="who" value="guardian"><span><b>My kid.</b> I'm their parent or guardian, and it's OK to set up their page.</span></label>
+        <label class="tick"><input type="radio" name="who" value="self"><span><b>Me.</b> I'm the rider, 18 or older.</span></label>
+      </div>
+    </fieldset>
+
     <fieldset>
       <legend>You</legend>
       <label>Your name<input type="text" name="parent" autocomplete="name" maxlength="60" required></label>
@@ -120,8 +135,9 @@
           <label class="pick"><input type="radio" name="phoneKind" value="Android"><span>Android</span></label>
           <label class="pick"><input type="radio" name="phoneKind" value="Both or not sure"><span>Both or not sure</span></label>
         </div>
+        <small id="androidLine" hidden>On Android you use Moto Tools in the Chrome web browser. The app is iPhone only for now.</small>
       </div>
-      <label>Another parent's email <small>Optional. They can sign in too.</small><input type="email" name="email2" autocomplete="off" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254"></label>
+      <label><span id="email2Label">Another parent's email</span> <small id="email2Hint">Optional. They can sign in too.</small><input type="email" name="email2" autocomplete="off" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254"></label>
     </fieldset>
 
     <fieldset id="shipBox">
@@ -136,7 +152,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>Your rider</legend>
+      <legend id="ridersLegend">Your rider</legend>
       <div id="riders"></div>
       <button type="button" class="btn ghost" id="addRider">+ Add another rider</button>
     </fieldset>
@@ -147,20 +163,16 @@
       <label>Do you have a GPS box yet? <small id="boxHint">We recommend the Dragy Lite. No box yet is fine.</small><select name="box">
         <option value="Not yet">Not yet</option><option value="Dragy Lite">Yes, a Dragy Lite</option><option value="Something else">Yes, something else</option>
       </select></label>
+      <label id="boxWhich" hidden>Which box?<input type="text" name="boxOther" maxlength="40" autocomplete="off" placeholder="Like a RaceBox Micro"></label>
       <label>Where you ride most <small>Optional.</small><input type="text" name="track" maxlength="60" placeholder="Track name"></label>
-      <label>Instagram or other social handles <small>Optional. So we can tag your rider.</small><input type="text" name="social" maxlength="80" autocomplete="off" autocapitalize="off" placeholder="@yourrider"></label>
+      <label>Instagram or other social handles <small id="socialHint">Optional. So we can tag your rider.</small><input type="text" name="social" maxlength="80" autocomplete="off" autocapitalize="off" placeholder="@yourrider"></label>
       <label>Anything we should know? <small>Optional.</small><textarea name="note" maxlength="300"></textarea></label>
     </fieldset>
 
     <label class="trap" aria-hidden="true">Leave this blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
-    <div class="ticks">
-      <div class="ticks-head">Who's signing up? <small>Pick one.</small></div>
-      <label class="tick"><input type="radio" name="who" value="guardian"><span>I'm this rider's parent or guardian, and it's OK to set up their page.</span></label>
-      <label class="tick"><input type="radio" name="who" value="self"><span>I'm the rider, 18 or older.</span></label>
-    </div>
     <p class="problem" id="problem" role="alert"></p>
     <button class="btn" type="submit" id="send">Send it to Moto Tools</button>
-    <p class="fine">We use this only to set up your rider's page. Rides stay private to your family. <a href="../privacy/">Privacy</a></p>
+    <p class="fine"><span id="fineLine">We use this only to set up your rider's page. Rides stay private to your family.</span> <a href="../privacy/">Privacy</a></p>
   </form>
 
   <section class="sent" id="sent" hidden tabindex="-1">
@@ -169,7 +181,7 @@
     <p class="sub" id="sentLine"></p>
     <ol>
       <li><b>We build the page.</b> Usually the same day.</li>
-      <li><b>We text you two links:</b> one to get the app, one that connects you to your rider.</li>
+      <li><b>We text you two links:</b> one to get the app, one that connects you to <span id="sentWho">your rider</span>.</li>
       <li><b>You sign in with your email.</b> No password.</li>
     </ol>
     <a class="btn" href="../" style="width:auto">Back to Moto Tools</a>
@@ -181,6 +193,8 @@
     <h2 id="madeLine"></h2>
     <a class="btn" href="https://testflight.apple.com/join/YKswYPvx">Get the app</a>
     <p class="sub">Open the app and sign in with <b class="email" id="madeEmail"></b>.</p>
+    <!-- Kam, Nov 21: an Android family uses Chrome. The first sync off the box is done with us in the pit. -->
+    <p class="sub" id="madeAndroid" hidden><b style="color:var(--ink)">On Android?</b> There's no app yet. Open <a href="https://app.mototoolsmx.com">app.mototoolsmx.com</a> in Chrome and sign in with the same email.</p>
     <p class="fine">No GPS box yet? Find us in the pit.</p>
   </section>
 
@@ -207,14 +221,12 @@
       <div class="rider-name"><span class="n-first">Rider</span><small class="n-last"></small></div>
       <button type="button" class="drop" hidden>Remove</button>
     </div>
-    <div class="two">
+    <div class="two names">
       <label>First name<input type="text" data-f="first" maxlength="30" autocomplete="off" required></label>
       <label>Last name<input type="text" data-f="last" maxlength="30" autocomplete="off"></label>
     </div>
-    <div class="two">
-      <label>Bike make<select data-f="make"><option value="">Pick one</option><option>KTM</option><option>Husqvarna</option><option>GasGas</option><option>Yamaha</option><option>Honda</option><option>Kawasaki</option><option>Suzuki</option><option>Cobra</option><option>Stacyc</option><option>Something else</option></select></label>
-      <label>Bike size<select data-f="size"><option value="">Pick one</option><option>50cc</option><option>65cc</option><option>85cc</option><option>Supermini</option><option>125cc</option><option>250cc</option><option>450cc</option><option>Electric</option><option>Something else</option></select></label>
-    </div>
+    <div class="bikes"></div>
+    <button type="button" class="text-btn add-bike">+ Add another bike</button>
     <label>Race number<input type="text" data-f="number" maxlength="4" inputmode="numeric" autocomplete="off" placeholder="72"></label>
     <div class="label">Plate color<div class="swatches" data-c="main"></div></div>
     <div class="label">Second color<div class="swatches" data-c="accent"></div></div>
@@ -226,7 +238,9 @@
   // Where the form goes: the Moto Tools app server. On a test copy of this page, the test server on the same computer.
   var live = /(^|\.)mototoolsmx\.com$/.test(location.hostname);
   var API = live ? 'https://app.mototoolsmx.com' : location.protocol + '//' + location.hostname + ':4491';
-  var MAX_RIDERS = 6;
+  var MAX_RIDERS = 6, MAX_BIKES = 4, ELSE = 'Something else';
+  var MAKES = ['KTM', 'Husqvarna', 'GasGas', 'Yamaha', 'Honda', 'Kawasaki', 'Suzuki', 'Cobra', 'Stacyc', ELSE];
+  var SIZES = ['50cc', '65cc', '85cc', 'Supermini', '125cc', '250cc', '450cc', 'Electric', ELSE];
   // Bike colors people know by name.
   var COLORS = [['#F26B1D', 'Orange'], ['#E01E26', 'Red'], ['#1C5FD4', 'Blue'], ['#1FA84A', 'Green'], ['#F4C430', 'Yellow'], ['#7B2FBE', 'Purple'], ['#FF4FA3', 'Pink'], ['#F5F3EE', 'White'], ['#141414', 'Black']];
   var form = document.getElementById('setup'), list = document.getElementById('riders'), add = document.getElementById('addRider');
@@ -274,6 +288,42 @@
     card.querySelector('.n-first').textContent = first || 'Rider';
     card.querySelector('.n-last').textContent = field(card, 'last').value.trim();
   }
+  // One bike: make and size. "Something else" for the make asks which, so a TM or a Beta doesn't show up as nothing.
+  function pickList(label, options) {
+    var wrap = document.createElement('label'), select = document.createElement('select');
+    wrap.textContent = label;
+    [''].concat(options).forEach(function (one) { var o = document.createElement('option'); o.value = one; o.textContent = one || 'Pick one'; select.appendChild(o); });
+    wrap.appendChild(select); return wrap;
+  }
+  function addBike(card, extra) {
+    var bikes = card.querySelector('.bikes'), row = document.createElement('div'), two = document.createElement('div');
+    row.className = 'bike'; two.className = 'two';
+    var make = pickList(extra ? 'Another bike: make' : 'Bike make', MAKES), size = pickList('Bike size', SIZES);
+    make.firstElementChild.className = 'b-make'; size.firstElementChild.className = 'b-size';
+    var col = document.createElement('div'); col.className = 'bike-col'; col.appendChild(make);
+    two.appendChild(col); two.appendChild(size); row.appendChild(two);
+    var which = document.createElement('label'), typed = document.createElement('input');
+    which.textContent = 'Which make?'; which.hidden = true; typed.type = 'text'; typed.className = 'b-other'; typed.maxLength = 20; typed.autocomplete = 'off';
+    which.appendChild(typed); col.appendChild(which);
+    make.firstElementChild.addEventListener('change', function () { which.hidden = this.value !== ELSE; if (!which.hidden) typed.focus(); });
+    if (extra) {
+      var drop = document.createElement('button'); drop.type = 'button'; drop.className = 'text-btn'; drop.textContent = 'Remove this bike';
+      drop.addEventListener('click', function () { row.remove(); tidyBikes(card); });
+      row.appendChild(drop);
+    }
+    bikes.appendChild(row); tidyBikes(card);
+    if (extra) make.firstElementChild.focus();
+  }
+  function tidyBikes(card) { card.querySelector('.add-bike').hidden = card.querySelectorAll('.bike').length >= MAX_BIKES; }
+  function bikesOf(card) {
+    var out = [], rows = card.querySelectorAll('.bike');
+    for (var i = 0; i < rows.length; i++) {
+      var make = rows[i].querySelector('.b-make').value, other = rows[i].querySelector('.b-other').value.trim();
+      var words = [make === ELSE ? (other || ELSE) : make, rows[i].querySelector('.b-size').value].filter(Boolean).join(' ');
+      if (words) out.push(words);
+    }
+    return out;
+  }
   function tidy() {
     var cards = list.querySelectorAll('.rider');
     for (var i = 0; i < cards.length; i++) cards[i].querySelector('.drop').hidden = cards.length < 2;
@@ -285,34 +335,82 @@
     swatches(card.querySelector('[data-c="accent"]'), 'accent' + n, '#141414');
     card.addEventListener('input', function () { paint(card); });
     card.addEventListener('change', function () { paint(card); });
-    card.querySelector('.drop').addEventListener('click', function () { card.remove(); tidy(); });
+    card.querySelector('.drop').addEventListener('click', function () { card.remove(); tidy(); reword(); });
+    card.querySelector('.add-bike').addEventListener('click', function () { addBike(card, true); });
+    addBike(card, false);
     list.appendChild(card); paint(card); tidy();
     if (focus) field(card, 'first').focus();
   }
   add.addEventListener('click', function () { addRider(true); });
   addRider(false);
 
+  // "Me, I'm the rider": the form talks about your page, and the first rider is you, named from "Your name".
+  var WORDS = {
+    title: ['Set up your rider', 'Set up your page'],
+    sub: pitEvent ? ["Two minutes. Tell us who's riding and their page is ready right away.", 'Two minutes. Tell us about you and your bike and your page is ready right away.']
+      : ["Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started.", "Two minutes. Tell us about you and your bike and we'll build your page, then text you the links to get started."],
+    email2Label: ["Another parent's email", 'Another email'],
+    email2Hint: ['Optional. They can sign in too.', 'Optional. Someone else who can sign in too.'],
+    ridersLegend: ['Your rider', 'You and your bike'],
+    socialHint: ['Optional. So we can tag your rider.', 'Optional. So we can tag you.'],
+    fineLine: ["We use this only to set up your rider's page. Rides stay private to your family.", 'We use this only to set up your page. Your rides stay private to you.']
+  };
+  function isMe() { return value('who') === 'self'; }
+  function reword() {
+    var me = isMe(), cards = list.querySelectorAll('.rider');
+    Object.keys(WORDS).forEach(function (id) { document.getElementById(id).textContent = WORDS[id][me ? 1 : 0]; });
+    for (var i = 0; i < cards.length; i++) {
+      var was = cards[i].classList.contains('me'), now = me && i === 0;
+      cards[i].classList.toggle('me', now);
+      if (was && !now) { field(cards[i], 'first').value = ''; field(cards[i], 'last').value = ''; paint(cards[i]); }
+    }
+    nameMe();
+  }
+  function nameMe() {
+    var card = list.querySelector('.rider.me'); if (!card) return;
+    var words = value('parent').split(/\s+/).filter(Boolean);
+    field(card, 'first').value = (words[0] || '').slice(0, 30); field(card, 'last').value = words.slice(1).join(' ').slice(0, 30);
+    paint(card);
+  }
+  Array.prototype.forEach.call(form.querySelectorAll('input[name=who]'), function (one) { one.addEventListener('change', reword); });
+  form.elements.parent.addEventListener('input', nameMe);
+  // Kam, Nov 21: an Android family uses the Chrome web browser. Say so as soon as they pick it.
+  Array.prototype.forEach.call(form.querySelectorAll('input[name=phoneKind]'), function (one) { one.addEventListener('change', function () { document.getElementById('androidLine').hidden = value('phoneKind') === 'iPhone'; }); });
+  form.elements.box.addEventListener('change', function () { var on = this.value === ELSE; document.getElementById('boxWhich').hidden = !on; if (on) form.elements.boxOther.focus(); });
+
   function value(name) { var one = form.elements[name]; return one ? String(one.value || '').trim() : ''; }
   function say(words, at) { problem.textContent = words; if (at) { at.focus(); if (at.scrollIntoView) at.scrollIntoView({ block: 'center' }); } }
   function gather() {
-    var riders = [], cards = list.querySelectorAll('.rider');
+    var riders = [], cards = list.querySelectorAll('.rider'), extra = [];
+    nameMe();
     for (var i = 0; i < cards.length; i++) {
-      var card = cards[i];
-      riders.push({ first: field(card, 'first').value.trim(), last: field(card, 'last').value.trim(), number: field(card, 'number').value.trim(),
-        bike: [field(card, 'make').value, field(card, 'size').value].filter(Boolean).join(' '), cls: '', main: color(card, 'main'), accent: color(card, 'accent') });
+      var card = cards[i], bikes = bikesOf(card), first = field(card, 'first').value.trim();
+      // The page gets the first bike. Any others ride along in the note, so Kam sees them.
+      if (bikes.length > 1) extra.push((first || 'Rider') + ' also rides: ' + bikes.slice(1).join(', ') + '.');
+      riders.push({ first: first, last: field(card, 'last').value.trim(), number: field(card, 'number').value.trim(),
+        bike: (bikes[0] || '').slice(0, 40), cls: '', main: color(card, 'main'), accent: color(card, 'accent') });
     }
     var data = { parent: value('parent'), phone: value('phone'), email: value('email'), email2: value('email2'), phoneKind: value('phoneKind'),
       riders: riders, box: value('box'), track: value('track'), note: value('note'), social: value('social'), ship: { street: value('street'), city: value('city'), state: value('state'), zip: value('zip') }, guardian: value('who') === 'guardian', self: value('who') === 'self', website: value('website') };
     if (pitEvent) delete data.ship;
-    if (data.box === BUYING) data.note = ('Wants to buy a box this weekend. ' + data.note).trim().slice(0, 300);
+    // What the server's lists have no place for goes at the front of the note, in plain words.
+    var front = [];
+    if (data.box === BUYING) front.push('Wants to buy a box this weekend.');
+    if (data.box === ELSE && value('boxOther')) {
+      var named = value('boxOther'), known = { 'racebox micro': 'RaceBox Micro', 'dragy pro': 'Dragy Pro' }[named.toLowerCase()];
+      if (known) data.box = known; else front.push('GPS box: ' + named + '.');
+    }
+    front = front.concat(extra);
+    if (front.length) data.note = (front.join(' ') + ' ' + data.note).trim().slice(0, 300);
     return data;
   }
   // The same checks the server makes, said next to the field, so nobody waits to find out.
   function check(data) {
+    if (!data.guardian && !data.self) return say("Tell us who's riding: your kid, or you.", form.querySelector('input[name=who]'));
     if (!data.parent) return say('Add your name.', form.elements.parent);
     if (data.phone.replace(/\D/g, '').length < 7) return say('Add a cell number we can text.', form.elements.phone);
     if (!/^\S+@\S+\.\S{2,}$/.test(data.email)) return say('Check your email address.', form.elements.email);
-    if (data.email2 && !/^\S+@\S+\.\S{2,}$/.test(data.email2)) return say('Check the other parent\'s email, or leave it blank.', form.elements.email2);
+    if (data.email2 && !/^\S+@\S+\.\S{2,}$/.test(data.email2)) return say('Check the second email, or leave it blank.', form.elements.email2);
     if (data.ship) {
     if (!data.ship.street) return say('Add the street address we should ship to.', form.elements.street);
     if (!data.ship.city) return say('Add the city.', form.elements.city);
@@ -324,7 +422,6 @@
       if (!data.riders[i].first) return say('Add your rider\'s first name.', field(cards[i], 'first'));
       if (data.riders[i].number && !/^#?\d{1,3}[a-z]?$/i.test(data.riders[i].number)) return say('A race number is up to 3 digits, like 72 or 7A. Or leave it blank.', field(cards[i], 'number'));
     }
-    if (!data.guardian && !data.self) return say('Tick one: you\'re the rider\'s parent or guardian, or the rider (18 or older).', form.querySelector('input[name=who]'));
     return true;
   }
   form.addEventListener('submit', function (event) {
@@ -340,7 +437,7 @@
       .then(function (got) {
         if (!got.ok) return back(got.body.error || 'That didn\'t go through. Try again in a minute.');
         var typed = data.riders.map(function (one) { return one.first; });
-        if (got.body.result === 'made') return made(got.body.riders, typed, data.email);
+        if (got.body.result === 'made') return made(got.body.riders, typed, data.email, data.phoneKind);
         if (got.body.result === 'held' && got.body.ticket) return held(got.body.ticket, typed, data);
         thanks(data, typed);
       })
@@ -356,10 +453,12 @@
   }
   function thanks(data, typed) {
     document.getElementById('sentLine').textContent = 'Thanks, ' + data.parent.split(' ')[0] + '. We have what we need to set up ' + both(typed) + '.';
+    if (data.self) document.getElementById('sentWho').textContent = 'your page';
     show('sent');
   }
   // The server gives first names only. If it gives none, the names they typed.
-  function made(riders, typed, email) {
+  function made(riders, typed, email, phoneKind) {
+    document.getElementById('madeAndroid').hidden = !phoneKind || phoneKind === 'iPhone';
     var names = Array.isArray(riders) && riders.length ? riders.map(String) : typed;
     document.getElementById('madeLine').textContent = names.length > 1 ? both(names) + '’s pages are ready.' : names[0] + '’s page is ready.';
     document.getElementById('madeEmail').textContent = email;
@@ -374,7 +473,7 @@
         .then(function (answer) { return answer.ok ? answer.json() : {}; })
         .catch(function () { return {}; })
         .then(function (body) {
-          if (body.result === 'made') { clearInterval(timer); return made(body.riders, typed, data.email); }
+          if (body.result === 'made') { clearInterval(timer); return made(body.riders, typed, data.email, data.phoneKind); }
           if (body.result === 'sent') { clearInterval(timer); return thanks(data, typed); }
           if (Date.now() > until) { clearInterval(timer); line.textContent = 'Find Kam in our pit, then tap Check again.'; again.hidden = false; }
         });
