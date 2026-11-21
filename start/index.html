@@ -73,6 +73,10 @@
   .tick { display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-size: 17px; cursor: pointer; }
   .ticks { display: grid; gap: 14px; }
   .tick span b { font-weight: 600; }
+  .android { font-size: 15px; font-weight: 400; color: var(--muted); border-left: 3px solid var(--orange); padding: 4px 0 4px 12px; margin-top: 4px; }
+  .android b { color: var(--ink); font-weight: 600; }
+  .android ol { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 4px; }
+  .hint-p { margin: 0; color: var(--muted); font-size: 15px; }
   /* The rider is the one filling this in: their name comes from "Your name", so it isn't asked twice. */
   .rider.me .names, .rider.me .drop { display: none !important; }
   .bikes { display: grid; gap: 14px; }
@@ -111,7 +115,7 @@
   <header>
     <a href="../"><img src="../img/wordmark.png" alt="Moto Tools"></a>
     <h1 id="title">Set up your rider</h1>
-    <p class="sub" id="sub">Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started.</p>
+    <p class="sub" id="sub">Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started. The app is free during testing.</p>
     <ol class="steps" id="steps"><li><b>1</b>You fill this out</li><li><b>2</b>We build the page</li><li><b>3</b>We text your links</li></ol>
   </header>
 
@@ -136,24 +140,27 @@
           <label class="pick"><input type="radio" name="phoneKind" value="Android"><span>Android</span></label>
           <label class="pick"><input type="radio" name="phoneKind" value="Both or not sure"><span>Both or not sure</span></label>
         </div>
-        <small id="androidLine" hidden>On Android you use Moto Tools in the Chrome web browser, and you get rides off the box there too. The app is iPhone only for now.</small>
+        <div id="androidLine" class="android" hidden><b>On Android</b> there's no app yet. You use the Chrome web browser:
+          <ol><li>Open <b>app.mototoolsmx.com</b> in Chrome.</li><li>Sign in with your email and the code we email you.</li><li>On your rider's page, tap the box button to get rides off the box.</li><li>Keep Bluetooth and Location on.</li></ol>
+        </div>
       </div>
       <label><span id="email2Label">Another parent's email</span> <small id="email2Hint">Optional. They can sign in too.</small><input type="email" name="email2" autocomplete="off" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254"></label>
     </fieldset>
 
     <fieldset id="shipBox">
       <legend>Shipping address</legend>
-      <p class="ship-why">We mail your GPS box's case here. Only we see it.</p>
-      <label>Street<input type="text" name="street" autocomplete="street-address" maxlength="80" required></label>
-      <label>City<input type="text" name="city" autocomplete="address-level2" maxlength="40" required></label>
+      <p class="ship-why">Optional. The case holds the GPS box on the bike. It's free for our test group, and this is where we mail it. Only we see it.</p>
+      <label>Street<input type="text" name="street" autocomplete="street-address" maxlength="80"></label>
+      <label>City<input type="text" name="city" autocomplete="address-level2" maxlength="40"></label>
       <div class="pair">
-        <label>State<input type="text" name="state" autocomplete="address-level1" autocapitalize="characters" maxlength="20" required></label>
-        <label>Zip<input type="text" name="zip" autocomplete="postal-code" inputmode="numeric" maxlength="10" required></label>
+        <label>State<input type="text" name="state" autocomplete="address-level1" autocapitalize="characters" maxlength="20"></label>
+        <label>Zip<input type="text" name="zip" autocomplete="postal-code" inputmode="numeric" maxlength="10"></label>
       </div>
     </fieldset>
 
     <fieldset>
       <legend id="ridersLegend">Your rider</legend>
+      <p class="hint-p">Not sure about something? Your best guess is fine. We'll fix it.</p>
       <div id="riders"></div>
       <button type="button" class="btn ghost" id="addRider">+ Add another rider</button>
     </fieldset>
@@ -161,19 +168,19 @@
     <fieldset>
       <legend>Riding</legend>
       <!-- Same question as the home page (Kam, Nov 20: nobody picks the Pro off a list). The values sent stay ones the server knows. -->
-      <label>Do you have a GPS box yet? <small id="boxHint">We recommend the Dragy Lite. No box yet is fine.</small><select name="box">
-        <option value="Not yet">Not yet</option><option value="Dragy Lite">Yes, a Dragy Lite</option><option value="Something else">Yes, something else</option>
+      <label>Do you have a GPS box yet? <small id="boxHint">We recommend the Dragy Lite, about $120 <a href="https://a.co/d/0h1aKMBk" rel="noopener" target="_blank">on Amazon</a>. Did a box come in the mail from us? That's a Dragy Lite. No box yet is fine.</small><select name="box">
+        <option value="Not yet">Not yet</option><option value="Dragy Lite">Yes, a Dragy Lite</option><option value="RaceBox">Yes, a RaceBox</option><option value="Something else">Yes, something else</option>
       </select></label>
-      <label id="boxWhich" hidden>Which box?<input type="text" name="boxOther" maxlength="40" autocomplete="off" placeholder="Like a RaceBox Micro"></label>
+      <label id="boxWhich" hidden><span id="boxWhichLabel">Which box?</span><input type="text" name="boxOther" maxlength="40" autocomplete="off"><small id="boxBring" hidden>Bring it and we'll get it connected.</small></label>
       <label>Where you ride most <small>Optional.</small><input type="text" name="track" maxlength="60" placeholder="Track name"></label>
-      <label>Instagram or other social handles <small id="socialHint">Optional. So we can tag your rider.</small><input type="text" name="social" maxlength="80" autocomplete="off" autocapitalize="off" placeholder="@yourrider"></label>
+      <label>Instagram or other social handles <small id="socialHint">Optional. Nothing is posted or tagged without your written yes.</small><input type="text" name="social" maxlength="80" autocomplete="off" autocapitalize="off" placeholder="@yourrider"></label>
       <label>Anything we should know? <small>Optional.</small><textarea name="note" maxlength="300"></textarea></label>
     </fieldset>
 
     <label class="trap" aria-hidden="true">Leave this blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
     <p class="problem" id="problem" role="alert"></p>
     <button class="btn" type="submit" id="send">Send it to Moto Tools</button>
-    <p class="fine"><span id="fineLine">We use this only to set up your rider's page. Rides stay private to your family.</span> <a href="../privacy/">Privacy</a></p>
+    <p class="fine"><span id="fineLine">We use this only to set up your rider's page. Only your family and Kam, who runs Moto Tools, can see the rides.</span> <a href="../privacy/">Privacy</a></p>
   </form>
 
   <section class="sent" id="sent" hidden tabindex="-1">
@@ -229,8 +236,9 @@
     <div class="bikes"></div>
     <button type="button" class="text-btn add-bike">+ Add another bike</button>
     <label>Race number<input type="text" data-f="number" maxlength="4" inputmode="numeric" autocomplete="off" placeholder="72"></label>
-    <div class="label">Plate color<div class="swatches" data-c="main"></div></div>
-    <div class="label">Second color<div class="swatches" data-c="accent"></div></div>
+    <label>Class <small>Optional. Like 65cc (10-11) or 250 B.</small><input type="text" data-f="cls" maxlength="30" autocomplete="off"></label>
+    <div class="label">Plate color <small>The background of the number plate.</small><div class="swatches" data-c="main"></div></div>
+    <div class="label">Second color <small>The stripe along the bottom of the plate.</small><div class="swatches" data-c="accent"></div></div>
   </div>
 </template>
 
@@ -256,13 +264,15 @@
     document.getElementById('phoneHint').textContent = 'In case we need to reach you.';
     // Fresh-eyes review, Nov 20 (Kam's calls, Nov 21): say where this is and that it's free, don't ask a pit family
     // for a shipping address, and let them say they want to buy a box this weekend.
-    var names = { mesquite: 'Mesquite MX' }, place = names[pitEvent];
+    // The dates drop off by themselves once the race is over (Thanksgiving MX at Mesquite, Nov 25 to 28).
+    var events = { mesquite: { name: 'Mesquite MX', when: 'November 25 to 28', until: '2026-11-29' } }, at = events[pitEvent], place = at && at.name;
+    var onNow = at && Date.now() < Date.parse(at.until + 'T00:00:00-07:00');
     var note = document.createElement('p'); note.className = 'pit-note';
-    note.textContent = (place ? place + ' this weekend. ' : '') + "Find us in the pit and we'll put a GPS box on the bike. The app is free during testing.";
+    note.textContent = (onNow ? place + ', ' + at.when + '. ' : '') + "Find us in the pit and we'll put a GPS box on the bike. Or bring your own Dragy or RaceBox and we'll get it connected. The app is free during testing.";
     if (place) { var code = document.createElement('small'); code.textContent = 'Your ' + place + ' code is already in from the QR.'; note.appendChild(code); }
     document.getElementById('sub').after(note);
     document.getElementById('shipBox').hidden = true;
-    document.getElementById('boxHint').textContent = "No box yet is fine. We'll have them in the pit.";
+    document.getElementById('boxHint').textContent = "No box yet is fine. We'll have them in the pit. Have your own? Bring it and we'll get it connected.";
     var buy = document.createElement('option'); buy.value = BUYING; buy.textContent = 'Buying one this weekend';
     form.elements.box.insertBefore(buy, form.elements.box.options[1]);
   }
@@ -299,14 +309,19 @@
   function addBike(card, extra) {
     var bikes = card.querySelector('.bikes'), row = document.createElement('div'), two = document.createElement('div');
     row.className = 'bike'; two.className = 'two';
-    var make = pickList(extra ? 'Another bike: make' : 'Bike make', MAKES), size = pickList('Bike size', SIZES);
+    var make = pickList(extra ? 'Another bike: brand' : 'Brand', MAKES), size = pickList('Bike size', SIZES);
     make.firstElementChild.className = 'b-make'; size.firstElementChild.className = 'b-size';
     var col = document.createElement('div'); col.className = 'bike-col'; col.appendChild(make);
     two.appendChild(col); two.appendChild(size); row.appendChild(two);
     var which = document.createElement('label'), typed = document.createElement('input');
-    which.textContent = 'Which make?'; which.hidden = true; typed.type = 'text'; typed.className = 'b-other'; typed.maxLength = 20; typed.autocomplete = 'off';
+    which.textContent = 'Which brand?'; which.hidden = true; typed.type = 'text'; typed.className = 'b-other'; typed.maxLength = 20; typed.autocomplete = 'off';
     which.appendChild(typed); col.appendChild(which);
     make.firstElementChild.addEventListener('change', function () { which.hidden = this.value !== ELSE; if (!which.hidden) typed.focus(); });
+    var sizeCol = document.createElement('div'), whichSize = document.createElement('label'), typedSize = document.createElement('input');
+    sizeCol.className = 'bike-col'; two.replaceChild(sizeCol, size); sizeCol.appendChild(size);
+    whichSize.textContent = 'Which size?'; whichSize.hidden = true; typedSize.type = 'text'; typedSize.className = 'b-size-other'; typedSize.maxLength = 12; typedSize.autocomplete = 'off';
+    whichSize.appendChild(typedSize); sizeCol.appendChild(whichSize);
+    size.firstElementChild.addEventListener('change', function () { whichSize.hidden = this.value !== ELSE; if (!whichSize.hidden) typedSize.focus(); });
     if (extra) {
       var drop = document.createElement('button'); drop.type = 'button'; drop.className = 'text-btn'; drop.textContent = 'Remove this bike';
       drop.addEventListener('click', function () { row.remove(); tidyBikes(card); });
@@ -320,7 +335,9 @@
     var out = [], rows = card.querySelectorAll('.bike');
     for (var i = 0; i < rows.length; i++) {
       var make = rows[i].querySelector('.b-make').value, other = rows[i].querySelector('.b-other').value.trim();
-      var words = [make === ELSE ? (other || ELSE) : make, rows[i].querySelector('.b-size').value].filter(Boolean).join(' ');
+      var size = rows[i].querySelector('.b-size').value, otherSize = rows[i].querySelector('.b-size-other').value.trim();
+      // "Something else" twice says nothing, so it's left off unless they typed what it is.
+      var words = [make === ELSE ? other : make, size === ELSE ? otherSize : size].filter(Boolean).join(' ');
       if (words) out.push(words);
     }
     return out;
@@ -349,12 +366,13 @@
   var WORDS = {
     title: ['Set up your rider', 'Set up your page'],
     sub: pitEvent ? ["Two minutes. Tell us who's riding and their page is ready right away.", 'Two minutes. Tell us about you and your bike and your page is ready right away.']
-      : ["Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started.", "Two minutes. Tell us about you and your bike and we'll build your page, then text you the links to get started."],
+      : ["Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started. The app is free during testing.", "Two minutes. Tell us about you and your bike and we'll build your page, then text you the links to get started. The app is free during testing."],
     email2Label: ["Another parent's email", 'Another email'],
     email2Hint: ['Optional. They can sign in too.', 'Optional. Someone else who can sign in too.'],
     ridersLegend: ['Your rider', 'You and your bike'],
-    socialHint: ['Optional. So we can tag your rider.', 'Optional. So we can tag you.'],
-    fineLine: ["We use this only to set up your rider's page. Rides stay private to your family.", 'We use this only to set up your page. Your rides stay private to you.']
+    socialHint: ['Optional. Nothing is posted or tagged without your written yes.', 'Optional. Nothing is posted or tagged without your written yes.'],
+    addRider: ['+ Add another rider', '+ Add someone else'],
+    fineLine: ["We use this only to set up your rider's page. Only your family and Kam, who runs Moto Tools, can see the rides.", 'We use this only to set up your page. Only you and Kam, who runs Moto Tools, can see your rides.']
   };
   function isMe() { return value('who') === 'self'; }
   function reword() {
@@ -376,8 +394,17 @@
   Array.prototype.forEach.call(form.querySelectorAll('input[name=who]'), function (one) { one.addEventListener('change', reword); });
   form.elements.parent.addEventListener('input', nameMe);
   // Kam, Nov 21: an Android family uses the Chrome web browser. Say so as soon as they pick it.
-  Array.prototype.forEach.call(form.querySelectorAll('input[name=phoneKind]'), function (one) { one.addEventListener('change', function () { document.getElementById('androidLine').hidden = value('phoneKind') === 'iPhone'; }); });
-  form.elements.box.addEventListener('change', function () { var on = this.value === ELSE; document.getElementById('boxWhich').hidden = !on; if (on) form.elements.boxOther.focus(); });
+  Array.prototype.forEach.call(form.querySelectorAll('input[name=phoneKind]'), function (one) { one.addEventListener('change', function () {
+    document.getElementById('androidLine').hidden = value('phoneKind') === 'iPhone';
+    if (pitEvent) document.getElementById('steps').innerHTML = '<li><b>1</b>You fill this out</li><li><b>2</b>' + (value('phoneKind') === 'Android' ? 'Open it in Chrome' : 'Get the app') + '</li><li><b>3</b>Sign in with your email</li>';
+  }); });
+  form.elements.box.addEventListener('change', function () {
+    var racebox = this.value === 'RaceBox', on = racebox || this.value === ELSE;
+    document.getElementById('boxWhich').hidden = !on; document.getElementById('boxBring').hidden = !racebox;
+    document.getElementById('boxWhichLabel').textContent = racebox ? 'Which RaceBox?' : 'Which box?';
+    form.elements.boxOther.placeholder = racebox ? 'Like Micro or Mini S' : '';
+    if (on) form.elements.boxOther.focus();
+  });
 
   function value(name) { var one = form.elements[name]; return one ? String(one.value || '').trim() : ''; }
   function say(words, at) { problem.textContent = words; if (at) { at.focus(); if (at.scrollIntoView) at.scrollIntoView({ block: 'center' }); } }
@@ -389,15 +416,21 @@
       // The page gets the first bike. Any others ride along in the note, so Kam sees them.
       if (bikes.length > 1) extra.push((first || 'Rider') + ' also rides: ' + bikes.slice(1).join(', ') + '.');
       riders.push({ first: first, last: field(card, 'last').value.trim(), number: field(card, 'number').value.trim(),
-        bike: (bikes[0] || '').slice(0, 40), cls: '', main: color(card, 'main'), accent: color(card, 'accent') });
+        bike: (bikes[0] || '').slice(0, 40), cls: field(card, 'cls').value.trim(), main: color(card, 'main'), accent: color(card, 'accent') });
     }
     var data = { parent: value('parent'), phone: value('phone'), email: value('email'), email2: value('email2'), phoneKind: value('phoneKind'),
       riders: riders, box: value('box'), track: value('track'), note: value('note'), social: value('social'), ship: { street: value('street'), city: value('city'), state: value('state'), zip: value('zip') }, guardian: value('who') === 'guardian', self: value('who') === 'self', website: value('website') };
-    if (pitEvent) delete data.ship;
+    // The address is optional: all four parts or none (the server's rule too).
+    if (pitEvent || !(data.ship.street || data.ship.city || data.ship.state || data.ship.zip)) delete data.ship;
     // What the server's lists have no place for goes at the front of the note, in plain words.
     var front = [];
     if (data.box === BUYING) front.push('Wants to buy a box this weekend.');
-    if (data.box === ELSE && value('boxOther')) {
+    // A RaceBox: the server knows the Micro by name. Any other model goes in the note in the family's words.
+    if (data.box === 'RaceBox') {
+      var model = value('boxOther');
+      if (!model || /micro/i.test(model)) data.box = 'RaceBox Micro'; else data.box = ELSE;
+      if (model) front.push('GPS box: RaceBox ' + model.replace(/^racebox\s*/i, '') + '.');
+    } else if (data.box === ELSE && value('boxOther')) {
       var named = value('boxOther'), known = { 'racebox micro': 'RaceBox Micro', 'dragy pro': 'Dragy Pro' }[named.toLowerCase()];
       if (known) data.box = known; else front.push('GPS box: ' + named + '.');
     }

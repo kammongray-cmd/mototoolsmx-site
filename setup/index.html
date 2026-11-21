@@ -49,6 +49,8 @@
   .lights { list-style: none; margin: 6px 0 10px 46px; padding: 0; display: grid; gap: 8px; font-size: 17px; }
   .lights b { display: block; font-weight: 600; }
   .l-red { color: #ff6b6b; } .l-blue { color: #6bb1ff; } .l-orange { color: var(--orange); }
+  .mini { margin: 6px 0; padding-left: 22px; display: grid; gap: 4px; }
+  .cap { color: var(--muted); font-size: 15px; margin: 6px 0 0; }
   .tip b { text-transform: uppercase; font: 800 17px 'Barlow Condensed', sans-serif; letter-spacing: .06em; color: var(--orange); display: block; }
   h3 { font: 800 22px/1.1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .03em; margin: 22px 0 6px; }
   footer { text-align: center; color: var(--muted); font-size: 15px; margin-top: 28px; }
@@ -60,6 +62,7 @@
     <a href="../"><img src="../img/wordmark.png" alt="Moto Tools"></a>
     <h1>Set up, step by step</h1>
     <p class="sub">From the invite link to your first laps. About ten minutes, most of it next to the bike.</p>
+    <p class="sub" style="margin-top:10px;color:var(--ink)">Got the box but no invite text yet? Do step 0 now. Steps 1 to 5 start when we text you the link.</p>
   </header>
 
   <nav aria-label="Steps">
@@ -76,7 +79,9 @@
     <div class="num">Step 0</div>
     <h2>Get the box ready</h2>
     <p>Do this first, so the box charges while you set up the app.</p>
-    <div class="do"><i>1</i><p><b>Plug it in.</b> The Dragy Lite has no power button. Plugging it in the first time turns it on, and it stays on.</p></div>
+    <figure class="shot"><img src="../img/setup/dragy-lite.jpg" alt="The Dragy Lite GPS box, with the charging port on its end" loading="lazy"></figure>
+    <p class="cap">This is the box, a Dragy Lite. The charging cable plugs into the end.</p>
+    <div class="do"><i>1</i><p><b>Plug it in.</b> The Dragy Lite has no power button. Plugging it in the first time turns it on, and it stays on. A full charge takes a few hours. Overnight is easiest.</p></div>
     <div class="do"><i>2</i><p><b>Watch the light.</b> It tells you what the box is doing.</p></div>
     <ul class="lights">
       <li><b class="l-red">Red, blinking</b>Charging.</li>
@@ -84,15 +89,18 @@
       <li><b class="l-blue">Blue, every 2 seconds</b>Connected to your phone.</li>
       <li><b class="l-orange">Orange, every 2 seconds</b>Recording.</li>
     </ul>
-    <div class="do"><i>3</i><p><b>Leave it on the charger until you head to the track.</b> It can't be switched off, and it loses about 3% an hour just sitting.</p></div>
+    <div class="do"><i>3</i><p><b>Leave it on the charger until you head to the track.</b> It's fine to leave it plugged in all week. Off the charger it slowly runs down, even sitting still, and is empty in a day or two.</p></div>
     <div class="tip"><b>Looking for a code on the box?</b>There isn't one. The app shows the box's code when you connect it in step 4. With one box you never need it. With two, write each code on the back so you can tell them apart.</div>
+    <div class="tip"><b>Have a RaceBox?</b>Its power and lights are different from the Dragy's. The connect and ride steps below are the same. Bring it to us and we'll get it connected.</div>
   </section>
 
   <section id="install">
     <div class="num">Step 1</div>
     <h2>Install the app</h2>
     <p>The iPhone app is in testing, so for now it comes through Apple's TestFlight app.</p>
-    <div class="tip"><b>On Android?</b>There's no Android app yet. You use Moto Tools in the Chrome web browser at app.mototoolsmx.com, and you get rides off the box there too. The pictures below show the iPhone app.</div>
+    <div class="tip"><b>On Android?</b>There's no Android app yet. You use the Chrome web browser, and you can skip steps 1 and 2:
+      <ol class="mini"><li>Open <b style="display:inline;font:inherit;color:var(--ink);text-transform:none;letter-spacing:0">app.mototoolsmx.com</b> in Chrome.</li><li>Sign in with your email and the code we email you.</li><li>On your rider's page, tap the box button to get rides off the box.</li><li>Keep Bluetooth and Location on.</li></ol>
+      The pictures below show the iPhone app.</div>
     <div class="do"><i>1</i><p>Tap the invite link we sent you.</p></div>
     <div class="do"><i>2</i><p>If it asks, install <b>TestFlight</b> from the App Store. It's free and made by Apple.</p></div>
     <div class="do"><i>3</i><p>Tap the invite link again, then tap <b>Accept</b> and <b>Install</b>. You'll see Moto Tools loading.</p></div>
@@ -140,8 +148,9 @@
     <figure class="shot"><img src="../img/setup/box-button.jpg" alt="The box button at the top of the rider's page" loading="lazy"></figure>
     <div class="do"><i>2</i><p>It says <b>No box yet</b>. Tap <b>Pick</b> and your rider's name. (The orange <b>How to set up</b> link right under it brings you back to this page.)</p></div>
     <figure class="shot"><img src="../img/setup/no-box-b6.jpg" alt="No box yet, with the Pick button" loading="lazy"></figure>
-    <div class="do"><i>3</i><p>Tap your box. With one box nearby, it's the only one on the list.</p></div>
+    <div class="do"><i>3</i><p>Tap your box. With one box nearby, it's the only one on the list. See two? Another family's box is close by. Yours is the one with your code (the tip in step 0).</p></div>
     <figure class="shot"><img src="../img/setup/pick-box-b6.jpg" alt="Pick their box" loading="lazy"></figure>
+    <p class="cap">The app mentions a sticker. Most boxes don't have one, so just tap your box.</p>
     <div class="do"><i>4</i><p>Tap <b>Yes, give it</b> to your rider.</p></div>
     <figure class="shot"><img src="../img/setup/give-box-b6.jpg" alt="Give this box to your rider" loading="lazy"></figure>
     <div class="do"><i>5</i><p>It connects by itself and looks for the box for a few seconds. If you have the Dragy app open, close it first. The box talks to one phone at a time.</p></div>
@@ -157,6 +166,8 @@
     <div class="do"><i>1</i><p>In the pits, before each session, tap <b>Start Recording</b>. It's the red button on the box screen. The light turns orange.</p></div>
     <div class="do"><i>2</i><p>Go ride. The box records by itself, so the phone doesn't ride on the bike. Keep it in your pocket or leave it in the pit.</p></div>
     <div class="do"><i>3</i><p>Back at the pit, open the app next to the bike. It finds the box again. Tap <b>Stop Recording</b>. The ride saves and shows up under <b>MY RIDES</b>. A long ride can take a few minutes.</p></div>
+    <div class="tip"><b>Forgot to stop?</b>Nothing breaks. The box keeps recording until you tap Stop Recording or the battery runs out. The ride just has extra time on it.</div>
+    <div class="tip"><b>Emptying the box</b>Once the ride shows under MY RIDES, tap <span style="color:var(--ink);font-weight:600">Clear</span> on the box screen. That empties the box so it's ready for the next ride.</div>
     <div class="tip"><b>Each session, or once for the day?</b>Starting and stopping each session is best. Recording once for the whole day works too. Either way, start the day with a full battery and an empty box. On a long day (6 hours or more) the battery or the storage can run out.</div>
     <figure class="shot"><img src="../img/setup/days.jpg" alt="Your rider's days" loading="lazy"></figure>
     <div class="do"><i>4</i><p>Tap the day to see every lap on the map.</p></div>
