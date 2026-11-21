@@ -100,7 +100,8 @@
   .done header h1, .done header .sub, .done header .steps { display: none; }
   .done header { padding-top: 20px; }
   .done header img { max-width: 180px; }
-  .done .sent { margin-top: 16px; }
+  .done .sent { margin-top: 12px; padding-top: 22px; padding-bottom: 22px; gap: 12px; }
+  .done .pit-note { margin-top: 6px; font-size: 16px; }
   [hidden] { display: none !important; }
   @media (max-width: 420px) { .two, .third { grid-template-columns: 1fr; } .plate { width: 84px; } }
 </style>
@@ -135,7 +136,7 @@
           <label class="pick"><input type="radio" name="phoneKind" value="Android"><span>Android</span></label>
           <label class="pick"><input type="radio" name="phoneKind" value="Both or not sure"><span>Both or not sure</span></label>
         </div>
-        <small id="androidLine" hidden>On Android you use Moto Tools in the Chrome web browser. The app is iPhone only for now.</small>
+        <small id="androidLine" hidden>On Android you use Moto Tools in the Chrome web browser, and you get rides off the box there too. The app is iPhone only for now.</small>
       </div>
       <label><span id="email2Label">Another parent's email</span> <small id="email2Hint">Optional. They can sign in too.</small><input type="email" name="email2" autocomplete="off" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254"></label>
     </fieldset>
@@ -194,7 +195,7 @@
     <a class="btn" href="https://testflight.apple.com/join/YKswYPvx">Get the app</a>
     <p class="sub">Open the app and sign in with <b class="email" id="madeEmail"></b>.</p>
     <!-- Kam, Nov 21: an Android family uses Chrome. The first sync off the box is done with us in the pit. -->
-    <p class="sub" id="madeAndroid" hidden><b style="color:var(--ink)">On Android?</b> There's no app yet. Open <a href="https://app.mototoolsmx.com">app.mototoolsmx.com</a> in Chrome and sign in with the same email.</p>
+    <p class="sub" id="madeAndroid" hidden><b style="color:var(--ink)">On Android?</b> Open <a href="https://app.mototoolsmx.com">app.mototoolsmx.com</a> in Chrome and sign in with the same email. You get rides off the box right there.</p>
     <p class="fine">No GPS box yet? Find us in the pit.</p>
   </section>
 
