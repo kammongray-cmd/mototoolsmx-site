@@ -287,7 +287,7 @@
   var pitEvent = (new URLSearchParams(location.search).get('event') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
   // In the pit the page is made on the spot and nothing gets texted (Kam's pit try, Nov 19), so say what really happens.
   // Kam, Nov 21: no cell in the pit. Turned on once the server takes a pit sign-up with no phone (Server and admin 8ae9261).
-  var PIT_NO_PHONE = false;
+  var PIT_NO_PHONE = true;
   if (pitEvent) {
     document.body.classList.add('pit');
     if (PIT_NO_PHONE) document.body.classList.add('no-phone');
