@@ -200,7 +200,7 @@
     <label class="trap" aria-hidden="true">Leave this blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
     <p class="problem" id="problem" role="alert"></p>
     <button class="btn" type="submit" id="send">Send it to Moto Tools</button>
-    <p class="fine"><span id="fineLine">We use this only to set up your rider's page. Only your family and Kam, who runs Moto Tools, can see the rides.</span> <a href="../privacy/">Privacy</a></p>
+    <p class="fine"><span id="fineLine">We use this only to set up your rider's page. Only your family and Moto Tools can see the rides.</span> <a href="../privacy/">Privacy</a></p>
   </form>
 
   <section class="sent" id="sent" hidden tabindex="-1">
@@ -230,7 +230,7 @@
   <section class="sent" id="held" hidden tabindex="-1">
     <div class="check wait" aria-hidden="true">…</div>
     <h2>Almost there</h2>
-    <p class="sub" id="heldLine">Show this screen to Kam in our pit.</p>
+    <p class="sub" id="heldLine">Show this screen to us in our pit.</p>
     <button class="btn" type="button" id="heldAgain" hidden style="width:auto">Check again</button>
   </section>
 
@@ -437,8 +437,8 @@
     ridersLegend: ['Your rider', 'You and your bike'],
     socialHint: ['Optional. Nothing is posted or tagged without your written yes.', 'Optional. Nothing is posted or tagged without your written yes.'],
     addRider: ['+ Add another rider', '+ Add someone else'],
-    fineLine: pitEvent ? ["Sending this says you're the rider's parent or guardian. Only your family and Kam, who runs Moto Tools, can see the rides.", "Sending this says you're 18 or older. Only you and Kam, who runs Moto Tools, can see your rides."]
-      : ["We use this only to set up your rider's page. Only your family and Kam, who runs Moto Tools, can see the rides.", 'We use this only to set up your page. Only you and Kam, who runs Moto Tools, can see your rides.'],
+    fineLine: pitEvent ? ["Sending this says you're the rider's parent or guardian. Only your family and Moto Tools can see the rides.", "Sending this says you're 18 or older. Only you and Moto Tools can see your rides."]
+      : ["We use this only to set up your rider's page. Only your family and Moto Tools can see the rides.", 'We use this only to set up your page. Only you and Moto Tools can see your rides.'],
     selfSwitch: ["I'm the rider, 18 or older", "No, I'm signing up my kid"]
   };
   function isMe() { return value('who') === 'self'; }
@@ -595,11 +595,11 @@
         .then(function (body) {
           if (body.result === 'made') { clearInterval(timer); return made(body.riders, typed, data.email, data.phoneKind); }
           if (body.result === 'sent') { clearInterval(timer); return thanks(data, typed); }
-          if (Date.now() > until) { clearInterval(timer); line.textContent = 'Find Kam in our pit, then tap Check again.'; again.hidden = false; }
+          if (Date.now() > until) { clearInterval(timer); line.textContent = 'Find us in our pit, then tap Check again.'; again.hidden = false; }
         });
     }
     function start() {
-      line.textContent = 'Show this screen to Kam in our pit.'; again.hidden = true;
+      line.textContent = 'Show this screen to us in our pit.'; again.hidden = true;
       until = Date.now() + 30 * 60000; clearInterval(timer); timer = setInterval(ask, 5000);
     }
     again.onclick = function () { start(); ask(); };
