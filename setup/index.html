@@ -14,30 +14,35 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* Same look as /start: dark page, one column, made for a phone held next to the bike. */
+  /* Same look as /start: dark page, one column, made for a phone held next to the bike.
+     Text sizes come from one scale shared with the rider page: 12, 14, 16, 20, 28, 40 (UI review, Kam Nov 21). */
   :root { --orange: #F26B1D; --ink: #F5F3EE; --muted: #A9ADB3; --bg: #17191C; --panel: #212429; --line: #30343A; }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 18px/1.5 Barlow, system-ui, -apple-system, sans-serif; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.5 Barlow, system-ui, -apple-system, sans-serif; }
   a { color: var(--orange); }
   .wrap { max-width: 600px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 64px max(16px, env(safe-area-inset-left, 0px)); }
   header { text-align: center; padding: 32px 0 8px; }
   header img { width: 100%; max-width: 230px; height: auto; }
-  h1 { font: italic 800 clamp(36px, 10vw, 50px)/1 'Barlow Condensed', 'Arial Narrow', sans-serif; text-transform: uppercase; margin: 22px 0 8px; text-wrap: balance; }
+  h1 { font: italic 800 40px/1 'Barlow Condensed', 'Arial Narrow', sans-serif; text-transform: uppercase; margin: 22px 0 8px; text-wrap: balance; }
   .sub { color: var(--muted); margin: 0 auto; max-width: 30em; }
-  nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 20px 0 6px; }
-  nav a { font: 600 15px 'Barlow Condensed', sans-serif; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; }
+  /* The step chips stay at the top while you scroll (UI review, Nov 21). One row; it slides sideways on a small phone. */
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+  nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); display: flex; gap: 8px; margin: 16px -16px 6px; padding: 10px 16px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--line); }
+  nav::-webkit-scrollbar { display: none; }
+  nav a { flex: none; font: 600 14px 'Barlow Condensed', sans-serif; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; }
+  nav a.on { color: var(--ink); border-color: var(--orange); }
   nav a b { color: var(--orange); margin-right: 6px; }
-  section { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); padding: 20px 18px 22px; margin-top: 18px; scroll-margin-top: 12px; }
-  .num { font: 600 15px 'Barlow Condensed', sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--orange); }
-  h2 { font: italic 800 34px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; margin: 4px 0 10px; text-wrap: balance; }
+  section { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); padding: 20px 18px 22px; margin-top: 18px; scroll-margin-top: 72px; }
+  .num { font: 600 14px 'Barlow Condensed', sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--orange); }
+  h2 { font: italic 800 28px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; margin: 4px 0 10px; text-wrap: balance; }
   p { margin: 0 0 12px; }
   ol, ul { margin: 0 0 12px; padding-left: 22px; }
   li { margin-bottom: 6px; }
   figure { margin: 16px 0 4px; }
   figure img, figure video { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); background: #000; }
   figure.phone img, figure video { max-width: 300px; margin: 0 auto; }
-  figcaption { color: var(--muted); font-size: 15px; margin-top: 8px; text-align: center; }
+  figcaption { color: var(--muted); font-size: 14px; margin-top: 8px; text-align: center; }
   .do { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: start; margin: 22px 0 0; }
   .do > i { font: 800 20px/34px 'Barlow Condensed', sans-serif; font-style: normal; width: 34px; height: 34px; border-radius: 50%; background: var(--orange); color: #17191C; text-align: center; }
   .do > p { margin: 3px 0 0; }
@@ -45,15 +50,19 @@
   figure.shot img, figure.shot video { max-width: 270px; margin: 0 auto; }
   .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .pair figure { margin-top: 6px; }
-  .tip { border-left: 3px solid var(--orange); background: rgba(242, 107, 29, .1); border-radius: 0 10px 10px 0; padding: 12px 14px; margin: 14px 0 4px; font-size: 17px; }
-  .lights { list-style: none; margin: 6px 0 10px 46px; padding: 0; display: grid; gap: 8px; font-size: 17px; }
+  .tip { border-left: 3px solid var(--orange); background: rgba(242, 107, 29, .1); border-radius: 0 10px 10px 0; padding: 12px 14px; margin: 14px 0 4px; font-size: 16px; }
+  .lights { list-style: none; margin: 6px 0 10px 46px; padding: 0; display: grid; gap: 8px; font-size: 16px; }
   .lights b { display: block; font-weight: 600; }
   .l-red { color: #ff6b6b; } .l-blue { color: #6bb1ff; } .l-orange { color: var(--orange); }
   .mini { margin: 6px 0; padding-left: 22px; display: grid; gap: 4px; }
-  .cap { color: var(--muted); font-size: 15px; margin: 6px 0 0; }
-  .tip b { text-transform: uppercase; font: 800 17px 'Barlow Condensed', sans-serif; letter-spacing: .06em; color: var(--orange); display: block; }
-  h3 { font: 800 22px/1.1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .03em; margin: 22px 0 6px; }
-  footer { text-align: center; color: var(--muted); font-size: 15px; margin-top: 28px; }
+  .cap { color: var(--muted); font-size: 14px; margin: 6px 0 0; }
+  .tip b { text-transform: uppercase; font: 800 16px 'Barlow Condensed', sans-serif; letter-spacing: .06em; color: var(--orange); display: block; }
+  h3 { font: 800 20px/1.1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .03em; margin: 22px 0 6px; }
+  footer { text-align: center; color: var(--muted); font-size: 14px; margin-top: 28px; }
+  /* Each step ends with the way to the next one. */
+  .next { display: block; margin-top: 22px; background: var(--orange); color: #17191C; text-decoration: none; text-align: center; font: 800 20px 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .04em; padding: 14px 18px; border-radius: 12px; }
+  .done-check { width: 56px; height: 56px; border-radius: 50%; background: rgba(95, 211, 141, .16); color: #5FD38D; display: grid; place-items: center; font-size: 28px; margin-bottom: 10px; }
+  .tip b.k { display: inline; font: inherit; color: var(--ink); text-transform: none; letter-spacing: 0; }
 </style>
 </head>
 <body>
@@ -62,24 +71,25 @@
     <a href="../"><img src="../img/wordmark.png" alt="Moto Tools"></a>
     <h1>Set up, step by step</h1>
     <p class="sub">From the invite link to your first laps. About ten minutes, most of it next to the bike.</p>
-    <p class="sub" style="margin-top:10px;color:var(--ink)">Got the box but no invite text yet? Do step 0 now. Steps 1 to 5 start when we text you the link.</p>
+    <p class="sub" style="margin-top:10px;color:var(--ink)">Got the box but no invite text yet? Charge it now. Steps 1 to 5 start when we text you the link.</p>
   </header>
 
   <nav aria-label="Steps">
-    <a href="#box"><b>0</b>The box</a>
+    <a href="#box">Charge first</a>
     <a href="#install"><b>1</b>Install</a>
     <a href="#signin"><b>2</b>Sign in</a>
     <a href="#mount"><b>3</b>Mount the box</a>
     <a href="#connect"><b>4</b>Connect</a>
     <a href="#ride"><b>5</b>Ride</a>
+    <a href="#done">Done</a>
   </nav>
 
   <!-- Step 0 (fresh-eyes review, Nov 20): all three newcomers stopped at "turn the box on". Box facts from Kam, Nov 21. -->
   <section id="box">
-    <div class="num">Step 0</div>
-    <h2>Get the box ready</h2>
+    <div class="num">Before you start</div>
+    <h2>Charge the box</h2>
     <p>Do this first, so the box charges while you set up the app.</p>
-    <figure class="shot"><img src="../img/setup/dragy-lite.jpg" alt="The Dragy Lite GPS box, with the charging port on its end" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/dragy-lite.jpg" width="1100" height="847" alt="The Dragy Lite GPS box, with the charging port on its end" loading="lazy"></figure>
     <p class="cap">This is the box, a Dragy Lite. The charging cable plugs into the end.</p>
     <div class="do"><i>1</i><p><b>Plug it in.</b> The Dragy Lite has no power button. Plugging it in the first time turns it on, and it stays on. A full charge takes a few hours. Overnight is easiest.</p></div>
     <div class="do"><i>2</i><p><b>Watch the light.</b> It tells you what the box is doing.</p></div>
@@ -92,6 +102,7 @@
     <div class="do"><i>3</i><p><b>Leave it on the charger until you head to the track.</b> It's fine to leave it plugged in all week. Off the charger it slowly runs down, even sitting still, and is empty in a day or two.</p></div>
     <div class="tip"><b>Looking for a code on the box?</b>There isn't one. The app shows the box's code when you connect it in step 4. With one box you never need it. With two, write each code on the back so you can tell them apart.</div>
     <div class="tip"><b>Have a RaceBox?</b>Its power and lights are different from the Dragy's. The connect and ride steps below are the same. Bring it to us and we'll get it connected.</div>
+    <a class="next" href="#install">Next: Install the app</a>
   </section>
 
   <section id="install">
@@ -99,27 +110,29 @@
     <h2>Install the app</h2>
     <p>The iPhone app is in testing, so for now it comes through Apple's TestFlight app.</p>
     <div class="tip"><b>On Android?</b>There's no Android app yet. You use the Chrome web browser, and you can skip steps 1 and 2:
-      <ol class="mini"><li>Open <b style="display:inline;font:inherit;color:var(--ink);text-transform:none;letter-spacing:0">app.mototoolsmx.com</b> in Chrome.</li><li>Sign in with your email and the code we email you.</li><li>On your rider's page, tap <b style="display:inline;font:inherit;color:var(--ink);text-transform:none;letter-spacing:0">CONNECT YOUR BOX</b>, tap your box in the list, then <b style="display:inline;font:inherit;color:var(--ink);text-transform:none;letter-spacing:0">Pair</b>.</li><li>Keep Bluetooth and Location on.</li></ol>
+      <ol class="mini"><li>Open <b class="k">app.mototoolsmx.com</b> in Chrome.</li><li>Sign in with your email and the code we email you.</li><li>On your rider's page, tap the <b class="k">BOX</b> button at the top, tap <b class="k">CONNECT YOUR BOX</b>, tap your box in the list, then <b class="k">Pair</b>.</li><li>Keep Bluetooth and Location on.</li></ol>
       The pictures below show the iPhone app. In Chrome the buttons look a little different, but the steps are the same.</div>
     <div class="do"><i>1</i><p>Tap the invite link we sent you.</p></div>
     <div class="do"><i>2</i><p>If it asks, install <b>TestFlight</b> from the App Store. It's free and made by Apple.</p></div>
     <div class="do"><i>3</i><p>Tap the invite link again, then tap <b>Accept</b> and <b>Install</b>. You'll see Moto Tools loading.</p></div>
-    <figure class="shot"><img src="../img/setup/install.jpg" alt="Moto Tools installing in TestFlight" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/install.jpg" width="720" height="916" alt="Moto Tools installing in TestFlight" loading="lazy"></figure>
     <div class="tip"><b>Stuck on "Ready To Test"?</b>If you see this screen with a Redeem button, close it and tap our invite link one more time. That takes you straight to Moto Tools.</div>
-    <figure class="shot"><img src="../img/setup/redeem.jpg" alt="The Ready To Test screen in TestFlight" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/redeem.jpg" width="720" height="626" alt="The Ready To Test screen in TestFlight" loading="lazy"></figure>
+    <a class="next" href="#signin">Next: Sign in</a>
   </section>
 
   <section id="signin">
     <div class="num">Step 2</div>
     <h2>Open it and sign in</h2>
     <div class="do"><i>1</i><p>Open Moto Tools. When it asks about Bluetooth, tap <b>Allow</b>. That's how the app talks to the box.</p></div>
-    <figure class="shot"><img src="../img/setup/bluetooth.jpg" alt="The Bluetooth question. Tap Allow." loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/bluetooth.jpg" width="720" height="1379" alt="The Bluetooth question. Tap Allow." loading="lazy"></figure>
     <div class="do"><i>2</i><p>Type the email you gave us and tap <b>Email me a code</b>. There's no password to remember.</p></div>
-    <figure class="shot"><img src="../img/setup/signin-email.jpg" alt="The sign in screen" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/signin-email.jpg" width="720" height="543" alt="The sign in screen" loading="lazy"></figure>
     <div class="do"><i>3</i><p>Type in the 6-digit code from that email. It can take a minute, and it can land in spam.</p></div>
-    <figure class="shot"><img src="../img/setup/signin-code.jpg" alt="The code screen" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/signin-code.jpg" width="720" height="543" alt="The code screen" loading="lazy"></figure>
     <div class="do"><i>4</i><p>You're in. This is your rider's page, with their plate at the top.</p></div>
-    <figure class="shot"><img src="../img/setup/days.jpg" alt="A rider's page" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/days.jpg" width="720" height="1318" alt="A rider's page" loading="lazy"></figure>
+    <a class="next" href="#mount">Next: Stick the box on</a>
   </section>
 
   <section id="mount">
@@ -128,53 +141,63 @@
     <p>The box rides on Velcro. Done right, it does not come off. The best spot is in front of the tank.</p>
     <div class="do"><i>1</i><p><b>Clean the spot with rubbing alcohol</b> and let it dry. This is the step that makes it hold. Dust, chain lube and tire shine all stop the glue from sticking.</p></div>
     <div class="do"><i>2</i><p>Peel the Velcro and press it on hard for 30 seconds.</p></div>
-    <figure class="shot"><img src="../img/setup/velcro-spot.jpg" alt="The Velcro patch in front of the tank" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/velcro-spot.jpg" width="900" height="1200" alt="The Velcro patch in front of the tank" loading="lazy"></figure>
     <div class="do"><i>3</i><p>Press the box onto the Velcro, flat side up to the sky. Then give it a tug. It should take a real pull to get it off.</p></div>
-    <figure class="shot"><video src="../img/setup/box-tank.mp4" poster="../img/setup/box-tank.jpg" autoplay muted loop playsinline preload="metadata"></video></figure>
+    <figure class="shot"><video src="../img/setup/box-tank.mp4" width="720" height="1280" poster="../img/setup/box-tank.jpg" autoplay muted loop playsinline preload="metadata"></video></figure>
     <div class="do"><i>4</i><p>Done. It should look like this.</p></div>
-    <figure class="shot"><img src="../img/setup/box-on-tank.jpg" alt="The box mounted in front of the tank" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/box-on-tank.jpg" width="900" height="1200" alt="The box mounted in front of the tank" loading="lazy"></figure>
     <div class="tip"><b>About the Velcro</b>The Dragy comes with its own Velcro, and it works great too. What you see in these pictures is Dual Lock, which we like to use when we have it. Either one holds.</div>
     <h3>No room there? Use the number plate</h3>
     <p>The top of the front number plate works too. Same steps: alcohol, Velcro, press, tug.</p>
-    <figure class="shot"><video src="../img/setup/box-plate.mp4" poster="../img/setup/box-plate.jpg" autoplay muted loop playsinline preload="metadata"></video></figure>
+    <figure class="shot"><video src="../img/setup/box-plate.mp4" width="720" height="1280" poster="../img/setup/box-plate.jpg" autoplay muted loop playsinline preload="metadata"></video></figure>
     <div class="tip">The box needs to see the sky. Don't bury it under the seat or a metal bracket.</div>
+    <a class="next" href="#connect">Next: Connect the box</a>
   </section>
 
   <section id="connect">
     <div class="num">Step 4</div>
     <h2>Connect the box</h2>
-    <p>You do this once. Turn Bluetooth on in your phone's Settings and stand next to the bike. The box is already on if its light is blinking (step 0).</p>
+    <p>You do this once. Turn Bluetooth on in your phone's Settings and stand next to the bike. The box is already on if its light is blinking (see Charge the box, at the top).</p>
     <div class="do"><i>1</i><p>Open the app. Under your rider's name there's a bar that says <b>Connect your box</b>. Tap <b>Set up</b>.</p></div>
-    <figure class="shot"><img src="../img/setup/b7-bar-setup.jpg" alt="The box bar under the rider's name, saying Connect your box, with a Set up button" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/b7-bar-setup.jpg" width="800" height="347" alt="The box bar under the rider's name, saying Connect your box, with a Set up button" loading="lazy"></figure>
     <div class="tip"><b>Don't see that bar?</b>Update the app in TestFlight. Or tap the small antenna button at the top. It opens the same screen.</div>
     <div class="do"><i>2</i><p>It says <b>No box yet</b>. Tap <b>Pick your rider's box</b>. (The orange <b>How to set up</b> link under it brings you back to this page.)</p></div>
-    <figure class="shot"><img src="../img/setup/b7-no-box.jpg" alt="No box yet, with the Pick box button" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/b7-no-box.jpg" width="800" height="973" alt="No box yet, with the Pick box button" loading="lazy"></figure>
     <div class="do"><i>3</i><p>Hold the box close and tap it in the list. With one box nearby, it's the only one there.</p></div>
-    <figure class="shot"><img src="../img/setup/b7-pick.jpg" alt="Pick their box: one Dragy Lite in the list, with its code under it" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/b7-pick.jpg" width="800" height="904" alt="Pick their box: one Dragy Lite in the list, with its code under it" loading="lazy"></figure>
     <div class="tip"><b>See two boxes?</b>Another family's box is close by. Hold yours right against the phone. It's the one with the most green bars. Once it's yours, the app remembers its code (the letters under its name) and you won't be asked again.</div>
     <div class="do"><i>4</i><p>Tap <b>Yes, give it</b> to your rider.</p></div>
-    <figure class="shot"><img src="../img/setup/b7-give.jpg" alt="Give this box to your rider" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/b7-give.jpg" width="800" height="1147" alt="Give this box to your rider" loading="lazy"></figure>
     <div class="do"><i>5</i><p>It looks for the box for a few seconds and connects by itself. If you have the Dragy app open, close it first. The box talks to one phone at a time.</p></div>
     <div class="do"><i>6</i><p><b>Box is ready</b> means you're connected. This is the <b>box screen</b>. The green dot is GPS, and the battery and storage are along the bottom.</p></div>
-    <figure class="shot"><img src="../img/setup/b7-ready.jpg" alt="The box screen: Box is ready, with a red Start Recording button" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/b7-ready.jpg" width="800" height="973" alt="The box screen: Box is ready, with a red Start Recording button" loading="lazy"></figure>
+    <a class="next" href="#ride">Next: Ride</a>
   </section>
 
   <section id="ride">
     <div class="num">Step 5</div>
     <h2>Ride, then look</h2>
     <div class="do"><i>1</i><p>In the pits, before each session, open the app next to the bike. The bar under your rider's name says <b>Box ready</b>. Tap the red <b>Record</b> button. The box's light turns orange.</p></div>
-    <figure class="shot"><img src="../img/setup/b7-bar-ready.jpg" alt="The box bar saying Box ready, with a red Record button" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/b7-bar-ready.jpg" width="800" height="347" alt="The box bar saying Box ready, with a red Record button" loading="lazy"></figure>
     <div class="do"><i>2</i><p>Go ride. The box records by itself, so the phone doesn't ride on the bike. Keep it in your pocket or leave it in the pit.</p></div>
     <div class="do"><i>3</i><p>Back at the pit, open the app next to the bike. It finds the box again. Tap <b>Stop</b>, then <b>Stop Recording</b> to confirm.</p></div>
-    <figure class="shot"><img src="../img/setup/b7-bar-recording.jpg" alt="The box bar while recording, with the clock and a Stop button" loading="lazy"></figure>
-    <div class="do"><i>4</i><p>The ride saves by itself and shows up under <b>MY RIDES</b>. A long ride can take a few minutes. Keep the box close until it's done.</p></div>
+    <figure class="shot"><img src="../img/setup/b7-bar-recording.jpg" width="800" height="347" alt="The box bar while recording, with the clock and a Stop button" loading="lazy"></figure>
+    <div class="do"><i>4</i><p>The ride saves by itself and shows up on your rider's page. A long ride can take a few minutes. Keep the box close until it's done.</p></div>
     <div class="tip"><b>Forgot to stop?</b>Nothing breaks. The box keeps recording until you tap Stop or the battery runs out. The ride just has extra time on it.</div>
-    <div class="tip"><b>Emptying the box</b>Clear takes the rides off the box, not off your page. It's safe once the app says <span style="color:var(--ink);font-weight:600">All saved</span>, which means every ride is under MY RIDES. To get there, tap the words on the bar to open the box screen, then tap <span style="color:var(--ink);font-weight:600">Clear the Dragy</span>.</div>
-    <figure class="shot"><img src="../img/setup/b7-allsaved.jpg" alt="The box screen saying All saved, with Record again and Clear the Dragy" loading="lazy"></figure>
+    <div class="tip"><b>Emptying the box</b>Clear takes the rides off the box, not off your page. It's safe once the app says <span style="color:var(--ink);font-weight:600">All saved</span>, which means every ride is on your rider's page. To get there, tap the words on the bar to open the box screen, then tap <span style="color:var(--ink);font-weight:600">Clear the Dragy</span>.</div>
+    <figure class="shot"><img src="../img/setup/b7-allsaved.jpg" width="800" height="1182" alt="The box screen saying All saved, with Record again and Clear the Dragy" loading="lazy"></figure>
     <div class="tip"><b>Each session, or once for the day?</b>Starting and stopping each session is best. Recording once for the whole day works too. Either way, start the day with a full battery and an empty box. On a long day (6 hours or more) the battery or the storage can run out.</div>
     <div class="do"><i>5</i><p>Tap a day to see every lap on the map.</p></div>
-    <figure class="shot"><img src="../img/setup/days.jpg" alt="Your rider's days" loading="lazy"></figure>
-    <figure class="shot"><img src="../img/setup/lap.jpg" alt="A lap on the map" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/days.jpg" width="720" height="1318" alt="Your rider's days" loading="lazy"></figure>
+    <figure class="shot"><img src="../img/setup/lap.jpg" width="720" height="1433" alt="A lap on the map" loading="lazy"></figure>
+    <a class="next" href="#done">Next: You're done</a>
+  </section>
+
+  <section id="done">
+    <div class="done-check" aria-hidden="true">✓</div>
+    <h2>You're done</h2>
+    <p>That's the whole setup. From here it's the same every ride day: charge the box the night before, tap Record in the pits, ride, tap Stop.</p>
+    <p>Your rider's laps, turns and top speed show up on their page after each ride.</p>
   </section>
 
   <section id="help">
@@ -185,5 +208,18 @@
 
   <footer>Moto Tools · <a href="../">mototoolsmx.com</a></footer>
 </div>
+<script>
+  // The chip for the step you're reading lights up and slides into view.
+  (function () {
+    if (!('IntersectionObserver' in window)) return;
+    var chips = {}; Array.prototype.forEach.call(document.querySelectorAll('nav a'), function (a) { chips[a.getAttribute('href').slice(1)] = a; });
+    var seen = new IntersectionObserver(function (all) { all.forEach(function (one) {
+      if (!one.isIntersecting || !chips[one.target.id]) return;
+      Object.keys(chips).forEach(function (k) { chips[k].classList.toggle('on', k === one.target.id); });
+      var nav = chips[one.target.id].parentNode, a = chips[one.target.id]; nav.scrollTo({ left: a.offsetLeft - nav.clientWidth / 2 + a.clientWidth / 2, behavior: 'smooth' });
+    }); }, { rootMargin: '-40% 0px -55% 0px' });
+    Array.prototype.forEach.call(document.querySelectorAll('section[id]'), function (s) { seen.observe(s); });
+  })();
+</script>
 </body>
 </html>

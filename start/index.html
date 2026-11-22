@@ -7,35 +7,41 @@
 <meta name="description" content="Tell us about your rider and we'll build their Moto Tools page.">
 <meta name="robots" content="noindex">
 <meta property="og:title" content="Set up your rider · Moto Tools">
-<meta property="og:description" content="Two minutes. Tell us about your rider and we'll build their page.">
+<meta property="og:description" content="About 4 minutes. Tell us about your rider and we'll build their page.">
 <meta property="og:image" content="https://mototoolsmx.com/img/share-wordmark.png">
 <link rel="icon" href="../img/icon-wordmark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&family=Kanit:ital,wght@1,800;1,900&family=Saira:ital,wdth,wght@1,112..125,800..900&display=swap" rel="stylesheet">
 <style>
-  /* Same look as the home page (colors, type, buttons). One column, thumb-sized fields, nothing that needs a new browser. */
+  /* Same look as the home page (colors, type, buttons). One column, thumb-sized fields, nothing that needs a new browser.
+     Text sizes come from one scale shared with the rider page: 12, 14, 16, 20, 28, 40 (UI review, Kam Nov 21). */
   :root { --orange: #F26B1D; --ink: #F5F3EE; --muted: #A9ADB3; --bg: #17191C; --panel: #212429; --line: #30343A; --bad: #FF8A6B; --good: #5FD38D; }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 18px/1.5 Barlow, system-ui, -apple-system, sans-serif; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.5 Barlow, system-ui, -apple-system, sans-serif; }
   a { color: var(--orange); }
   .wrap { max-width: 600px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 56px max(16px, env(safe-area-inset-left, 0px)); }
   header { text-align: center; padding: 32px 0 8px; }
   header img { width: 100%; max-width: 250px; height: auto; }
-  h1 { font: italic 800 clamp(34px, 9vw, 46px)/1 'Barlow Condensed', 'Arial Narrow', sans-serif; text-transform: uppercase; letter-spacing: .01em; margin: 22px 0 8px; text-wrap: balance; }
+  h1 { font: italic 800 40px/1 'Barlow Condensed', 'Arial Narrow', sans-serif; text-transform: uppercase; letter-spacing: .01em; margin: 22px 0 8px; text-wrap: balance; }
   .sub { color: var(--muted); margin: 0 auto; max-width: 30em; }
   .steps { list-style: none; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 0; margin: 18px 0 0; }
-  .steps li { font: 600 15px 'Barlow Condensed', sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+  .steps li { font: 600 14px 'Barlow Condensed', sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
   .steps li b { color: var(--orange); margin-right: 6px; }
 
   form { display: grid; gap: 18px; margin-top: 26px; }
   fieldset { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); padding: 20px 18px; margin: 0; display: grid; gap: 14px; min-width: 0; }
-  legend { font: 800 24px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .03em; padding: 0 8px; margin-left: -8px; }
-  label, .label { display: grid; gap: 6px; color: var(--muted); font-size: 15px; font-weight: 500; }
+  legend { font: 800 20px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .03em; padding: 0 8px; margin-left: -8px; }
+  label, .label { display: grid; gap: 6px; color: var(--muted); font-size: 14px; font-weight: 500; }
+  /* The few boxes you have to fill in say so (UI review, Nov 21). */
+  .req { color: var(--orange); font: 600 12px Barlow, sans-serif; letter-spacing: .08em; text-transform: uppercase; margin-left: 6px; }
+  legend .req { vertical-align: middle; }
+  .err { color: var(--bad); font-size: 14px; font-weight: 500; }
+  input[aria-invalid=true] { border-color: var(--bad); }
   label small, .label small { font-weight: 400; }
   input[type=text], input[type=email], input[type=tel], select, textarea {
-    font: 400 18px Barlow, system-ui, sans-serif; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px;
+    font: 400 16px Barlow, system-ui, sans-serif; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px;
     padding: 13px 12px; width: 100%; min-height: 50px; -webkit-appearance: none; appearance: none;
   }
   select { background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 20px) 22px, calc(100% - 14px) 22px; background-size: 6px 6px; background-repeat: no-repeat; padding-right: 36px; }
@@ -43,62 +49,65 @@
   input:focus, select:focus, textarea:focus, button:focus-visible, .pick input:focus-visible + span, .sw input:focus-visible + span { outline: 2px solid var(--orange); outline-offset: 2px; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .ship-why { margin: 0; color: var(--muted); font-size: 15px; }
+  .ship-why { margin: 0; color: var(--muted); font-size: 14px; }
   .third { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
 
   /* Pick one of a few: big tappable pills (phone type). */
   .picks { display: flex; flex-wrap: wrap; gap: 8px; }
   .pick { position: relative; display: block; }
   .pick input { position: absolute; opacity: 0; inset: 0; margin: 0; }
-  .pick span { display: block; padding: 11px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 17px; cursor: pointer; }
+  .pick span { display: block; padding: 11px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font-size: 16px; cursor: pointer; }
   .pick input:checked + span { border-color: var(--orange); background: rgba(242, 107, 29, .16); font-weight: 600; }
 
   /* The rider: a plate that fills in as they type, and two rows of colors. */
   .rider { border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 14px; }
   .rider:first-of-type { border-top: 0; padding-top: 0; }
   .rider-head { display: flex; align-items: center; gap: 14px; }
-  .plate { width: 96px; height: auto; flex: none; filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); }
-  .rider-name { font: italic 800 30px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; overflow-wrap: anywhere; min-width: 0; }
+  /* The same plate the rider page draws (rider-plate.js mxPlateSvg), so what you pick here is what you see inside. */
+  .plate { width: 150px; flex: none; filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); }
+  .plate svg { display: block; width: 100%; height: auto; }
+  .rider-name { font: italic 800 28px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; overflow-wrap: anywhere; min-width: 0; }
   .rider-name small { display: block; font: 600 14px 'Barlow Condensed', sans-serif; letter-spacing: .18em; color: var(--muted); font-style: normal; margin-top: 4px; }
-  .drop { margin-left: auto; background: none; border: 0; color: var(--muted); font: 500 15px Barlow, sans-serif; text-decoration: underline; cursor: pointer; padding: 10px 0 10px 10px; }
+  .drop { margin-left: auto; background: none; border: 0; color: var(--muted); font: 500 14px Barlow, sans-serif; text-decoration: underline; cursor: pointer; padding: 10px 0 10px 10px; }
   .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
   .sw { position: relative; display: block; }
   .sw input { position: absolute; opacity: 0; inset: 0; margin: 0; }
   .sw span { display: block; width: 44px; height: 44px; border-radius: 10px; border: 2px solid var(--line); cursor: pointer; }
   .sw input:checked + span { border-color: var(--ink); box-shadow: 0 0 0 2px var(--orange); }
 
-  .btn { display: inline-block; background: var(--orange); color: #17191C; border: 0; cursor: pointer; font: 800 22px 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .04em; padding: 16px 28px; border-radius: 12px; width: 100%; min-height: 58px; }
+  .btn { display: inline-block; background: var(--orange); color: #17191C; border: 0; cursor: pointer; font: 800 20px 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .04em; padding: 16px 28px; border-radius: 12px; width: 100%; min-height: 58px; }
   .btn[disabled] { opacity: .6; cursor: default; }
-  .ghost { background: transparent; color: var(--ink); border: 2px dashed var(--line); font-size: 18px; min-height: 50px; padding: 12px; }
-  .tick { display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-size: 17px; cursor: pointer; }
+  .ghost { background: transparent; color: var(--ink); border: 2px dashed var(--line); font-size: 16px; min-height: 50px; padding: 12px; }
+  .tick { display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-size: 16px; cursor: pointer; }
   .ticks { display: grid; gap: 14px; }
   .tick span b { font-weight: 600; }
-  .android { font-size: 15px; font-weight: 400; color: var(--muted); border-left: 3px solid var(--orange); padding: 4px 0 4px 12px; margin-top: 4px; }
+  .android { font-size: 14px; font-weight: 400; color: var(--muted); border-left: 3px solid var(--orange); padding: 4px 0 4px 12px; margin-top: 4px; }
   .android b { color: var(--ink); font-weight: 600; }
   .android ol { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 4px; }
-  .hint-p { margin: 0; color: var(--muted); font-size: 15px; }
+  .hint-p { margin: 0; color: var(--muted); font-size: 14px; }
   /* The rider is the one filling this in: their name comes from "Your name", so it isn't asked twice. */
   .rider.me .names, .rider.me .drop { display: none !important; }
   .bikes { display: grid; gap: 14px; }
   .bike, .bike-col { display: grid; gap: 10px; align-content: start; }
   .bike + .bike { border-top: 1px dashed var(--line); padding-top: 14px; }
-  .text-btn { background: none; border: 0; color: var(--muted); font: 500 15px Barlow, sans-serif; text-decoration: underline; cursor: pointer; padding: 6px 0; justify-self: start; }
+  .text-btn { background: none; border: 0; color: var(--muted); font: 500 14px Barlow, sans-serif; text-decoration: underline; cursor: pointer; padding: 6px 0; justify-self: start; }
   .add-bike { color: var(--orange); font-size: 16px; text-decoration: none; font-weight: 600; }
-  .pit-note { margin: 10px auto 0; max-width: 30em; color: var(--ink); font-size: 17px; }
+  .pit-note { margin: 10px auto 0; max-width: 22em; color: var(--muted); font-size: 16px; text-wrap: balance; }
+  .pit-note b { display: block; color: var(--orange); font: 600 14px 'Barlow Condensed', sans-serif; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 4px; }
   .pit-note small { display: block; color: var(--muted); font-size: 14px; margin-top: 4px; }
   .tick input { width: 26px; height: 26px; margin: 1px 0 0; accent-color: var(--orange); flex: none; }
-  .fine { color: var(--muted); font-size: 15px; margin: 0; text-align: center; }
+  .fine { color: var(--muted); font-size: 14px; margin: 0; text-align: center; }
   .problem { color: var(--bad); font-weight: 500; margin: 0; text-align: center; min-height: 1.5em; }
   .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
   .sent { text-align: center; padding: 34px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); margin-top: 26px; display: grid; gap: 14px; justify-items: center; }
   .sent:focus { outline: none; }
-  .sent h2 { font: italic 800 38px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; margin: 0; }
+  .sent h2 { font: italic 800 40px/1 'Barlow Condensed', sans-serif; text-transform: uppercase; margin: 0; }
   .sent ol { text-align: left; margin: 0; padding-left: 22px; display: grid; gap: 8px; color: var(--muted); max-width: 26em; }
   .sent ol b { color: var(--ink); font-weight: 500; }
   .sent .email { color: var(--ink); font-weight: 600; overflow-wrap: anywhere; }
   .check.wait { background: rgba(242, 107, 29, .16); color: var(--orange); }
-  .check { width: 62px; height: 62px; border-radius: 50%; background: rgba(95, 211, 141, .16); color: var(--good); display: grid; place-items: center; font-size: 34px; }
+  .check { width: 62px; height: 62px; border-radius: 50%; background: rgba(95, 211, 141, .16); color: var(--good); display: grid; place-items: center; font-size: 28px; }
   footer { color: var(--muted); font-size: 14px; text-align: center; padding-top: 28px; }
   /* Once it's sent, the answer fits on one phone screen: just the logo over it (Kam, Nov 19). */
   .done header h1, .done header .sub, .done header .steps { display: none; }
@@ -107,7 +116,17 @@
   .done .sent { margin-top: 12px; padding-top: 22px; padding-bottom: 22px; gap: 12px; }
   .done .pit-note { margin-top: 6px; font-size: 16px; }
   [hidden] { display: none !important; }
-  @media (max-width: 420px) { .two, .third { grid-template-columns: 1fr; } .plate { width: 84px; } }
+  /* In the pit (?event=): four boxes. Your name, email, rider's first name, race number (Kam, Nov 21). The rest Kam asks in person. */
+  .pit header { padding-top: 16px; }
+  .pit header img { max-width: 150px; }
+  .pit h1 { margin-top: 12px; }
+  .pit.no-phone #phoneWrap { display: none !important; }
+  .pit .steps, .pit #whoBox, .pit #phonePick, .pit #email2Wrap, .pit #shipBox, .pit #ridingBox, .pit .hint-p,
+  .pit .rider .bikes, .pit .rider .add-bike, .pit .rider .cls, .pit .rider .colors, .pit .rider .last { display: none !important; }
+  .pit .rider .names { grid-template-columns: 1fr; }
+  .pit form { margin-top: 16px; }
+  .self-switch { justify-self: start; }
+  @media (max-width: 420px) { .two, .third { grid-template-columns: 1fr; } .plate { width: 136px; } }
 </style>
 </head>
 <body>
@@ -115,14 +134,14 @@
   <header>
     <a href="../"><img src="../img/wordmark.png" alt="Moto Tools"></a>
     <h1 id="title">Set up your rider</h1>
-    <p class="sub" id="sub">Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started. The app is free during testing.</p>
+    <p class="sub" id="sub">About 4 minutes. Tell us who's riding and we'll build their page, then text you the links to get started. The app is free during testing.</p>
     <ol class="steps" id="steps"><li><b>1</b>You fill this out</li><li><b>2</b>We build the page</li><li><b>3</b>We text your links</li></ol>
   </header>
 
   <form id="setup" novalidate>
     <!-- Asked first (fresh-eyes review, Nov 20; Kam, Nov 21), so the rest of the form can talk to a rider about "your page". -->
-    <fieldset>
-      <legend>Who's riding?</legend>
+    <fieldset id="whoBox">
+      <legend>Who's riding? <span class="req">Required</span></legend>
       <div class="ticks">
         <label class="tick"><input type="radio" name="who" value="guardian"><span><b>My kid.</b> I'm their parent or guardian, and it's OK to set up their page.</span></label>
         <label class="tick"><input type="radio" name="who" value="self"><span><b>Me.</b> I'm the rider, 18 or older.</span></label>
@@ -131,10 +150,11 @@
 
     <fieldset>
       <legend>You</legend>
-      <label>Your name<input type="text" name="parent" autocomplete="name" maxlength="60" required></label>
-      <label>Cell phone <small id="phoneHint">We text your links here.</small><input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="30" required></label>
-      <label>Email <small>This is how you sign in. We email a code, so there's no password.</small><input type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254" required></label>
-      <div class="label">Your phone
+      <button type="button" class="text-btn self-switch" id="selfSwitch" hidden>I'm the rider, 18 or older</button>
+      <label><span>Your name <span class="req">Required</span></span><input type="text" name="parent" autocomplete="name" maxlength="60" required></label>
+      <label id="phoneWrap"><span>Cell phone <span class="req">Required</span></span><small id="phoneHint">We text your links here.</small><input type="tel" name="phone" autocomplete="tel" inputmode="tel" maxlength="30" required><span class="err" hidden></span></label>
+      <label><span>Email <span class="req">Required</span></span><small>This is how you sign in. We email a code, so there's no password.</small><input type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254" required><span class="err" hidden></span></label>
+      <div class="label" id="phonePick">Your phone
         <div class="picks" role="radiogroup" aria-label="Your phone">
           <label class="pick"><input type="radio" name="phoneKind" value="iPhone" checked><span>iPhone</span></label>
           <label class="pick"><input type="radio" name="phoneKind" value="Android"><span>Android</span></label>
@@ -144,7 +164,7 @@
           <ol><li>Open <b>app.mototoolsmx.com</b> in Chrome.</li><li>Sign in with your email and the code we email you.</li><li>On your rider's page, tap the box button to get rides off the box.</li><li>Keep Bluetooth and Location on.</li></ol>
         </div>
       </div>
-      <label><span id="email2Label">Another parent's email</span> <small id="email2Hint">Optional. They can sign in too.</small><input type="email" name="email2" autocomplete="off" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254"></label>
+      <label id="email2Wrap"><span id="email2Label">Another parent's email</span> <small id="email2Hint">Optional. They can sign in too.</small><input type="email" name="email2" autocomplete="off" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254"><span class="err" hidden></span></label>
     </fieldset>
 
     <fieldset id="shipBox">
@@ -165,7 +185,7 @@
       <button type="button" class="btn ghost" id="addRider">+ Add another rider</button>
     </fieldset>
 
-    <fieldset>
+    <fieldset id="ridingBox">
       <legend>Riding</legend>
       <!-- Same question as the home page (Kam, Nov 20: nobody picks the Pro off a list). The values sent stay ones the server knows. -->
       <label>Do you have a GPS box yet? <small id="boxHint">We recommend the Dragy Lite, about $120 <a href="https://a.co/d/0h1aKMBk" rel="noopener" target="_blank">on Amazon</a>. Did a box come in the mail from us? That's a Dragy Lite. No box yet is fine.</small><select name="box">
@@ -218,27 +238,24 @@
   <footer>Moto Tools · <a href="../">mototoolsmx.com</a></footer>
 </div>
 
+<datalist id="classList"></datalist>
+
 <template id="riderTemplate">
   <div class="rider">
     <div class="rider-head">
-      <svg class="plate" viewBox="0 0 120 110" aria-hidden="true">
-        <path class="p-main" d="M14 6 H106 Q114 6 113 15 L104 82 Q102 96 88 98 L78 100 Q74 88 60 88 Q46 88 42 100 L32 98 Q18 96 16 82 L7 15 Q6 6 14 6 Z" fill="#F26B1D" stroke="#0b0c0e" stroke-width="3" stroke-linejoin="round"/>
-        <path class="p-accent" d="M12.5 62 H107.5 L104 82 Q102 96 88 98 L78 100 Q74 88 60 88 Q46 88 42 100 L32 98 Q18 96 16 82 Z" fill="#141414"/>
-        <text class="p-num" x="60" y="56" text-anchor="middle" font-family="'Barlow Condensed', 'Arial Narrow', sans-serif" font-style="italic" font-weight="800" font-size="50" fill="#fff"></text>
-      </svg>
-      <div class="rider-name"><span class="n-first">Rider</span><small class="n-last"></small></div>
+      <div class="plate" aria-hidden="true"></div>
       <button type="button" class="drop" hidden>Remove</button>
     </div>
     <div class="two names">
-      <label>First name<input type="text" data-f="first" maxlength="30" autocomplete="off" required></label>
-      <label>Last name<input type="text" data-f="last" maxlength="30" autocomplete="off"></label>
+      <label><span>First name <span class="req">Required</span></span><input type="text" data-f="first" maxlength="30" autocomplete="off" required></label>
+      <label class="last">Last name<input type="text" data-f="last" maxlength="30" autocomplete="off"></label>
     </div>
     <div class="bikes"></div>
     <button type="button" class="text-btn add-bike">+ Add another bike</button>
-    <label>Race number<input type="text" data-f="number" maxlength="4" inputmode="numeric" autocomplete="off" placeholder="72"></label>
-    <label>Class <small>Optional. Like 65cc (10-11) or 250 B.</small><input type="text" data-f="cls" maxlength="30" autocomplete="off"></label>
-    <div class="label">Plate color <small>The background of the number plate.</small><div class="swatches" data-c="main"></div></div>
-    <div class="label">Second color <small>The stripe along the bottom of the plate.</small><div class="swatches" data-c="accent"></div></div>
+    <label>Race number <small>Optional.</small><input type="text" data-f="number" maxlength="4" inputmode="numeric" autocomplete="off" placeholder="72"></label>
+    <label class="cls">Class <small>Optional. Start typing to pick one, like 65cc (10-11) or 250 B.</small><input type="text" data-f="cls" maxlength="40" autocomplete="off" list="classList"></label>
+    <div class="label colors">Plate color <small>The background of the number plate.</small><div class="swatches" data-c="accent"></div></div>
+    <div class="label colors">Bottom color <small>The color along the bottom of the plate.</small><div class="swatches" data-c="main"></div></div>
   </div>
 </template>
 
@@ -248,8 +265,12 @@
   var live = /(^|\.)mototoolsmx\.com$/.test(location.hostname);
   var API = live ? 'https://app.mototoolsmx.com' : location.protocol + '//' + location.hostname + ':4491';
   var MAX_RIDERS = 6, MAX_BIKES = 4, ELSE = 'Something else';
-  var MAKES = ['KTM', 'Husqvarna', 'GasGas', 'Yamaha', 'Honda', 'Kawasaki', 'Suzuki', 'Cobra', 'Stacyc', ELSE];
-  var SIZES = ['50cc', '65cc', '85cc', 'Supermini', '125cc', '250cc', '450cc', 'Electric', ELSE];
+  // Brands and sizes match the rider page's garage (garage.js), so a bike typed here lands the same there. Stacyc stays here too.
+  var MAKES = ['KTM', 'Husqvarna', 'GasGas', 'Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'Triumph', 'Beta', 'Cobra', 'Stark', 'Sur-Ron', 'TM', 'Stacyc', ELSE];
+  var SIZES = ['50cc', '65cc', '85cc', '110cc', '112cc (Supermini)', '125cc', '150cc', '250cc', '300cc', '350cc', '450cc', '500cc', 'Electric', ELSE];
+  // Class names as the rider page has them (profile-options.json). Free text still works for anything else.
+  var CLASSES = ['50cc (4-6)', '50cc (7-8)', '51cc (4-6) Shaft Drive Ltd', '51cc (5-7) Ltd', '51cc Open (5-8) Ltd', 'Mini E (4-8)', '65cc (7-9)', '65cc (8-10)', '65cc (10-11)', '65cc Open (7-11)', 'Girls 65cc (7-11)', '85cc (9-11)', '85cc (9-12)', '85cc (12-15)', '85cc Open (9-15)', 'Girls 85cc-112cc (9-16)', 'Supermini 1 (12-15)', 'Supermini 2 (13-16)', 'Schoolboy 1 (12-17) B/C', 'Schoolboy 2 (12-17) B/C', '125 (12-17) B/C', 'Women (12+)', '250 A', '250 B', '250 C', '250 C Jr. (12-17)', '250 D', '450 A', '450 B', '450 C', '450 D', 'Open A', 'Open B', 'Open C', 'Open B/C', 'Open D', 'College (18-24) A/B/C', 'Junior (25+)', 'Vet (30+)', 'Vet Pro (30+)', 'Senior (40+)', '+30 Open', '+40 Open', '+50 Open'];
+  CLASSES.forEach(function (one) { var o = document.createElement('option'); o.value = one; document.getElementById('classList').appendChild(o); });
   // Bike colors people know by name.
   var COLORS = [['#F26B1D', 'Orange'], ['#E01E26', 'Red'], ['#1C5FD4', 'Blue'], ['#1FA84A', 'Green'], ['#F4C430', 'Yellow'], ['#7B2FBE', 'Purple'], ['#FF4FA3', 'Pink'], ['#F5F3EE', 'White'], ['#141414', 'Black']];
   var form = document.getElementById('setup'), list = document.getElementById('riders'), add = document.getElementById('addRider');
@@ -258,18 +279,25 @@
   var BUYING = 'Buying one this weekend';
   var pitEvent = (new URLSearchParams(location.search).get('event') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
   // In the pit the page is made on the spot and nothing gets texted (Kam's pit try, Nov 19), so say what really happens.
+  // Kam, Nov 21: no cell in the pit. Turned on once the server takes a pit sign-up with no phone (Server and admin 8ae9261).
+  var PIT_NO_PHONE = false;
   if (pitEvent) {
-    document.getElementById('sub').textContent = "Two minutes. Tell us who's riding and their page is ready right away.";
+    document.body.classList.add('pit');
+    if (PIT_NO_PHONE) document.body.classList.add('no-phone');
+    else document.getElementById('phoneHint').textContent = 'In case we need to reach you.';
+    // Four boxes in the pit: your name, email, rider's first name, race number. A parent signs up their kid unless they say they're the rider.
+    form.querySelector('input[name=who][value=guardian]').checked = true;
+    document.getElementById('selfSwitch').hidden = false;
+    document.getElementById('sub').hidden = true;
     document.getElementById('steps').innerHTML = '<li><b>1</b>You fill this out</li><li><b>2</b>Get the app</li><li><b>3</b>Sign in with your email</li>';
-    document.getElementById('phoneHint').textContent = 'In case we need to reach you.';
     // Fresh-eyes review, Nov 20 (Kam's calls, Nov 21): say where this is and that it's free, don't ask a pit family
     // for a shipping address, and let them say they want to buy a box this weekend.
     // The dates drop off by themselves once the race is over (Thanksgiving MX at Mesquite, Nov 25 to 28).
     var events = { mesquite: { name: 'Mesquite MX', when: 'November 25 to 28', until: '2026-11-29' } }, at = events[pitEvent], place = at && at.name;
     var onNow = at && Date.now() < Date.parse(at.until + 'T00:00:00-07:00');
     var note = document.createElement('p'); note.className = 'pit-note';
-    note.textContent = (onNow ? place + ', ' + at.when + '. ' : '') + "Find us in the pit and we'll put a GPS box on the bike. Or bring your own Dragy or RaceBox and we'll get it connected. The app is free during testing.";
-    if (place) { var code = document.createElement('small'); code.textContent = 'Your ' + place + ' code is already in from the QR.'; note.appendChild(code); }
+    if (onNow) { var when = document.createElement('b'); when.textContent = place + ' · ' + at.when; note.appendChild(when); }
+    note.appendChild(document.createTextNode("Free during testing. Need a GPS box? Find us in the pit, or bring your own."));
     document.getElementById('sub').after(note);
     document.getElementById('shipBox').hidden = true;
     document.getElementById('boxHint').textContent = "No box yet is fine. We'll have them in the pit. Have your own? Bring it and we'll get it connected.";
@@ -289,15 +317,43 @@
   }
   function field(card, name) { return card.querySelector('[data-f="' + name + '"]'); }
   function color(card, which) { var on = card.querySelector('[data-c="' + which + '"] input:checked'); return on ? on.value : COLORS[0][0]; }
+  // The plate, drawn the way the rider page draws it (tools/ride-viewer/rider-plate.js, mxPlateSvg and plateColors).
+  // The page puts the plate in the second color and the bottom in the first, so the form's picks map the same way.
+  var PLATE_PATH = 'M2,22 Q1,16 6,13 L22,3 Q25,1 29,1.5 Q120,14 211,1.5 Q215,1 218,3 L234,13 Q239,16 238,22 L229,80 C226,120 214,158 196,176 L172,198 Q170,200 167,200 L148,200 Q145,200 145,197 L144,183 Q143,180 140,180 L100,180 Q97,180 96,183 L95,197 Q95,200 92,200 L73,200 Q70,200 68,198 L44,176 C26,158 14,120 11,80 Z';
+  var FIELD = 'M-2,-2 L242,-2 L242,60 L232,66 L214,136 L159,170 L152,158 L88,158 L81,170 L26,136 L8,66 L-2,60 Z', TAB = 'M88,158 L152,158 L159,170 L162,182 L78,182 L81,170 Z';
+  function dark(hex) { var n = parseInt(hex.slice(1), 16); return ((n >> 16) * 299 + ((n >> 8) & 255) * 587 + (n & 255) * 114) / 1000 < 140; }
+  function near(a, b) { var x = parseInt(a.slice(1), 16), y = parseInt(b.slice(1), 16); return Math.abs((x >> 16) - (y >> 16)) + Math.abs(((x >> 8) & 255) - ((y >> 8) & 255)) + Math.abs((x & 255) - (y & 255)) < 90; }
+  function esc(text) { return String(text).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function fit(text, size, room) { return text.length * size * 0.66 > room ? ' textLength="' + room + '" lengthAdjust="spacingAndGlyphs"' : ''; }
+  var plates = 0;
+  function plateSvg(r) {
+    var bg = r.accent, num = dark(bg) ? '#ffffff' : '#141414', swoosh = r.main, pick = dark(bg) ? swoosh : '#141414', trim = near(pick, bg) ? num : pick;
+    var ink = function (hex) { return dark(hex) ? '#ffffff' : '#141414'; }, id = 'fp' + (++plates);
+    var first = r.first.toUpperCase().slice(0, 14), last = r.last.toUpperCase().slice(0, 16), small = last ? first : '', big = last || first;
+    var number = r.number.slice(0, 3), numberSize = number.length >= 3 ? 124 : 146, bigSize = big.length > 9 ? 10.5 : 12;
+    var numberFit = number.length >= 3 ? ' textLength="182" lengthAdjust="spacingAndGlyphs"' : number.length === 2 ? ' textLength="170" lengthAdjust="spacingAndGlyphs"' : '';
+    var face = "Saira,Kanit,'Arial Black',Impact,sans-serif";
+    return '<svg viewBox="0 0 240 202"><defs><clipPath id="' + id + '"><path d="' + PLATE_PATH + '"/></clipPath>'
+      + '<mask id="' + id + 'h"><rect x="-2" y="-2" width="244" height="206" fill="#fff"/><circle cx="121" cy="30" r="8" fill="#000"/></mask>'
+      + '<linearGradient id="' + id + 'g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".09"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>'
+      + '<filter id="' + id + 'i" color-interpolation-filters="sRGB"><feFlood flood-color="' + ink(bg) + '"/><feComposite in2="SourceAlpha" operator="in"/></filter></defs>'
+      + '<g mask="url(#' + id + 'h)"><g clip-path="url(#' + id + ')">'
+      + '<rect x="-2" y="-2" width="244" height="206" fill="' + swoosh + '"/><path d="' + FIELD + '" fill="' + bg + '"/><path d="' + TAB + '" fill="' + swoosh + '"/>'
+      + '<path d="M-2,-2 L117,-2 L117,11 L95,38 L-2,38 Z" fill="' + trim + '"/>'
+      + '<path d="M-2,132 C60,104 170,94 242,108 L242,204 L-2,204 Z" fill="url(#' + id + 'g)"/></g>'
+      + (small ? '<text x="20" y="21" font-family="' + face + '" font-style="italic" font-weight="800" font-size="6.5" style="font-stretch:125%" letter-spacing=".4" fill="' + ink(trim) + '"' + fit(small, 6.5, 60) + '>' + esc(small) + '</text>' : '')
+      + (big ? '<text x="17" y="' + (small ? 32.5 : 28) + '" font-family="' + face + '" font-style="italic" font-weight="900" font-size="' + bigSize + '" style="font-stretch:125%" fill="' + ink(trim) + '"' + fit(big, bigSize, 72) + '>' + esc(big) + '</text>' : '')
+      + (number ? '<text x="118" y="' + (number.length >= 3 ? 145 : 151) + '" text-anchor="middle" font-family="' + face + '" font-style="italic" font-weight="900" font-size="' + numberSize + '" letter-spacing="-3"' + numberFit + ' fill="' + num + '">' + esc(number) + '</text>' : '')
+      + (r.brand ? '<text x="120" y="174.5" text-anchor="middle" font-family="' + face + '" font-style="italic" font-weight="800" font-size="12" style="font-stretch:110%" fill="' + ink(swoosh) + '"' + fit(r.brand, 12, 60) + '>' + esc(r.brand) + '</text>' : '')
+      + '<image href="../img/plate-logo.png" x="182" y="6" width="37" height="35" preserveAspectRatio="xMidYMid meet"' + (dark(bg) ? '' : ' filter="url(#' + id + 'i)"') + '/></g>'
+      + '<circle cx="121" cy="30" r="8" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="1.2"/>'
+      + (dark(bg) ? '<path d="' + PLATE_PATH + '" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="1"/>' : '')
+      + '</svg>';
+  }
   function paint(card) {
-    var main = color(card, 'main'), first = field(card, 'first').value.trim();
-    card.querySelector('.p-main').setAttribute('fill', main);
-    card.querySelector('.p-accent').setAttribute('fill', color(card, 'accent'));
-    var num = card.querySelector('.p-num'), text = field(card, 'number').value.trim().replace(/^#/, '').slice(0, 4);
-    num.textContent = text; num.setAttribute('fill', light(main) ? '#141414' : '#ffffff');
-    num.setAttribute('font-size', text.length > 3 ? 34 : text.length > 2 ? 42 : 50);
-    card.querySelector('.n-first').textContent = first || 'Rider';
-    card.querySelector('.n-last').textContent = field(card, 'last').value.trim();
+    var first = field(card, 'first').value.trim(), make = card.querySelector('.b-make'), brand = make && make.value !== ELSE ? make.value : '';
+    card.querySelector('.plate').innerHTML = plateSvg({ first: first || 'Rider', last: field(card, 'last').value.trim(),
+      number: field(card, 'number').value.trim().replace(/^#/, '').replace(/[^0-9]/g, ''), main: color(card, 'main').toLowerCase(), accent: color(card, 'accent').toLowerCase(), brand: brand });
   }
   // One bike: make and size. "Something else" for the make asks which, so a TM or a Beta doesn't show up as nothing.
   function pickList(label, options) {
@@ -365,14 +421,16 @@
   // "Me, I'm the rider": the form talks about your page, and the first rider is you, named from "Your name".
   var WORDS = {
     title: ['Set up your rider', 'Set up your page'],
-    sub: pitEvent ? ["Two minutes. Tell us who's riding and their page is ready right away.", 'Two minutes. Tell us about you and your bike and your page is ready right away.']
-      : ["Two minutes. Tell us who's riding and we'll build their page, then text you the links to get started. The app is free during testing.", "Two minutes. Tell us about you and your bike and we'll build your page, then text you the links to get started. The app is free during testing."],
+    sub: pitEvent ? ['', '']
+      : ["About 4 minutes. Tell us who's riding and we'll build their page, then text you the links to get started. The app is free during testing.", "About 4 minutes. Tell us about you and your bike and we'll build your page, then text you the links to get started. The app is free during testing."],
     email2Label: ["Another parent's email", 'Another email'],
     email2Hint: ['Optional. They can sign in too.', 'Optional. Someone else who can sign in too.'],
     ridersLegend: ['Your rider', 'You and your bike'],
     socialHint: ['Optional. Nothing is posted or tagged without your written yes.', 'Optional. Nothing is posted or tagged without your written yes.'],
     addRider: ['+ Add another rider', '+ Add someone else'],
-    fineLine: ["We use this only to set up your rider's page. Only your family and Kam, who runs Moto Tools, can see the rides.", 'We use this only to set up your page. Only you and Kam, who runs Moto Tools, can see your rides.']
+    fineLine: pitEvent ? ["Sending this says you're the rider's parent or guardian. Only your family and Kam, who runs Moto Tools, can see the rides.", "Sending this says you're 18 or older. Only you and Kam, who runs Moto Tools, can see your rides."]
+      : ["We use this only to set up your rider's page. Only your family and Kam, who runs Moto Tools, can see the rides.", 'We use this only to set up your page. Only you and Kam, who runs Moto Tools, can see your rides.'],
+    selfSwitch: ["I'm the rider, 18 or older", "No, I'm signing up my kid"]
   };
   function isMe() { return value('who') === 'self'; }
   function reword() {
@@ -392,6 +450,22 @@
     paint(card);
   }
   Array.prototype.forEach.call(form.querySelectorAll('input[name=who]'), function (one) { one.addEventListener('change', reword); });
+  document.getElementById('selfSwitch').addEventListener('click', function () {
+    form.querySelector('input[name=who][value=' + (isMe() ? 'guardian' : 'self') + ']').checked = true; reword();
+  });
+  if (pitEvent) reword();
+  // Phone and email are checked as soon as you leave the box, not only at Send (UI review, Nov 21).
+  function okPhone(text) { return text.replace(/\D/g, '').length >= 7; }
+  function okEmail(text) { return /^\S+@\S+\.\S{2,}$/.test(text); }
+  function watch(input, ok, words) {
+    var err = input.parentNode.querySelector('.err');
+    function show(bad) { err.hidden = !bad; err.textContent = bad ? words : ''; if (bad) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid'); }
+    input.addEventListener('blur', function () { var text = input.value.trim(); show(!!text && !ok(text)); });
+    input.addEventListener('input', function () { if (!err.hidden && ok(input.value.trim())) show(false); });
+  }
+  watch(form.elements.phone, okPhone, 'That number looks short. We need a cell we can text.');
+  watch(form.elements.email, okEmail, 'Check the email. It should look like name@example.com.');
+  watch(form.elements.email2, okEmail, 'Check this email, or leave it blank.');
   form.elements.parent.addEventListener('input', nameMe);
   // Kam, Nov 21: an Android family uses the Chrome web browser. Say so as soon as they pick it.
   Array.prototype.forEach.call(form.querySelectorAll('input[name=phoneKind]'), function (one) { one.addEventListener('change', function () {
@@ -421,6 +495,7 @@
     var data = { parent: value('parent'), phone: value('phone'), email: value('email'), email2: value('email2'), phoneKind: value('phoneKind'),
       riders: riders, box: value('box'), track: value('track'), note: value('note'), social: value('social'), ship: { street: value('street'), city: value('city'), state: value('state'), zip: value('zip') }, guardian: value('who') === 'guardian', self: value('who') === 'self', website: value('website') };
     // The address is optional: all four parts or none (the server's rule too).
+    if (pitEvent) data.phoneKind = 'Both or not sure';
     if (pitEvent || !(data.ship.street || data.ship.city || data.ship.state || data.ship.zip)) delete data.ship;
     // What the server's lists have no place for goes at the front of the note, in plain words.
     var front = [];
@@ -442,9 +517,10 @@
   function check(data) {
     if (!data.guardian && !data.self) return say("Tell us who's riding: your kid, or you.", form.querySelector('input[name=who]'));
     if (!data.parent) return say('Add your name.', form.elements.parent);
-    if (data.phone.replace(/\D/g, '').length < 7) return say('Add a cell number we can text.', form.elements.phone);
-    if (!/^\S+@\S+\.\S{2,}$/.test(data.email)) return say('Check your email address.', form.elements.email);
-    if (data.email2 && !/^\S+@\S+\.\S{2,}$/.test(data.email2)) return say('Check the second email, or leave it blank.', form.elements.email2);
+    // In the pit there's no cell box (Kam, Nov 21: email is all we need there).
+    if (!(pitEvent && PIT_NO_PHONE) && !okPhone(data.phone)) return say('Add a cell number we can text.', form.elements.phone);
+    if (!okEmail(data.email)) return say('Check your email address.', form.elements.email);
+    if (data.email2 && !okEmail(data.email2)) return say('Check the second email, or leave it blank.', form.elements.email2);
     if (data.ship) {
     if (!data.ship.street) return say('Add the street address we should ship to.', form.elements.street);
     if (!data.ship.city) return say('Add the city.', form.elements.city);
