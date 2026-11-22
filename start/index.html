@@ -122,7 +122,7 @@
   .pit h1 { margin-top: 12px; }
   .pit.no-phone #phoneWrap { display: none !important; }
   .pit .steps, .pit #whoBox, .pit #phonePick, .pit #email2Wrap, .pit #shipBox, .pit #ridingBox, .pit .hint-p,
-  .pit .rider .bikes, .pit .rider .add-bike, .pit .rider .cls, .pit .rider .colors, .pit .rider .last { display: none !important; }
+  .pit .rider .bikes, .pit .rider .add-bike, .pit .rider .cls, .pit .rider .colors { display: none !important; }
   .pit .rider .names { grid-template-columns: 1fr; }
   .pit form { margin-top: 16px; }
   .self-switch { justify-self: start; }
@@ -248,7 +248,14 @@
     </div>
     <div class="two names">
       <label><span>First name <span class="req">Required</span></span><input type="text" data-f="first" maxlength="30" autocomplete="off" required></label>
-      <label class="last">Last name<input type="text" data-f="last" maxlength="30" autocomplete="off"></label>
+      <label class="last"><span>Last name <span class="req">Required</span></span><input type="text" data-f="last" maxlength="30" autocomplete="off" required></label>
+    </div>
+    <!-- Kam, Nov 21: one name on the plate, first or last, the rider's pick. -->
+    <div class="label">Name on the plate
+      <div class="picks plate-pick" role="radiogroup" aria-label="Name on the plate">
+        <label class="pick"><input type="radio" value="last" checked><span>Last name</span></label>
+        <label class="pick"><input type="radio" value="first"><span>First name</span></label>
+      </div>
     </div>
     <div class="bikes"></div>
     <button type="button" class="text-btn add-bike">+ Add another bike</button>
@@ -329,7 +336,7 @@
   function plateSvg(r) {
     var bg = r.accent, num = dark(bg) ? '#ffffff' : '#141414', swoosh = r.main, pick = dark(bg) ? swoosh : '#141414', trim = near(pick, bg) ? num : pick;
     var ink = function (hex) { return dark(hex) ? '#ffffff' : '#141414'; }, id = 'fp' + (++plates);
-    var first = r.first.toUpperCase().slice(0, 14), last = r.last.toUpperCase().slice(0, 16), small = last ? first : '', big = last || first;
+    var first = r.first.toUpperCase().slice(0, 14), last = r.last.toUpperCase().slice(0, 16), small = '', big = r.big === 'first' ? first : last || first;
     var number = r.number.slice(0, 3), numberSize = number.length >= 3 ? 124 : 146, bigSize = big.length > 9 ? 10.5 : 12;
     var numberFit = number.length >= 3 ? ' textLength="182" lengthAdjust="spacingAndGlyphs"' : number.length === 2 ? ' textLength="170" lengthAdjust="spacingAndGlyphs"' : '';
     var face = "Saira,Kanit,'Arial Black',Impact,sans-serif";
@@ -350,9 +357,10 @@
       + (dark(bg) ? '<path d="' + PLATE_PATH + '" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="1"/>' : '')
       + '</svg>';
   }
+  function bigName(card) { var on = card.querySelector('.plate-pick input:checked'); return on ? on.value : 'last'; }
   function paint(card) {
     var first = field(card, 'first').value.trim(), make = card.querySelector('.b-make'), brand = make && make.value !== ELSE ? make.value : '';
-    card.querySelector('.plate').innerHTML = plateSvg({ first: first || 'Rider', last: field(card, 'last').value.trim(),
+    card.querySelector('.plate').innerHTML = plateSvg({ first: first || 'Rider', last: field(card, 'last').value.trim(), big: bigName(card),
       number: field(card, 'number').value.trim().replace(/^#/, '').replace(/[^0-9]/g, ''), main: color(card, 'main').toLowerCase(), accent: color(card, 'accent').toLowerCase(), brand: brand });
   }
   // One bike: make and size. "Something else" for the make asks which, so a TM or a Beta doesn't show up as nothing.
@@ -407,6 +415,7 @@
     var card = document.getElementById('riderTemplate').content.firstElementChild.cloneNode(true), n = ++count;
     swatches(card.querySelector('[data-c="main"]'), 'main' + n, '#F26B1D');
     swatches(card.querySelector('[data-c="accent"]'), 'accent' + n, '#141414');
+    Array.prototype.forEach.call(card.querySelectorAll('.plate-pick input'), function (one) { one.name = 'big' + n; });
     card.addEventListener('input', function () { paint(card); });
     card.addEventListener('change', function () { paint(card); });
     card.querySelector('.drop').addEventListener('click', function () { card.remove(); tidy(); reword(); });
@@ -490,7 +499,7 @@
       // The page gets the first bike. Any others ride along in the note, so Kam sees them.
       if (bikes.length > 1) extra.push((first || 'Rider') + ' also rides: ' + bikes.slice(1).join(', ') + '.');
       riders.push({ first: first, last: field(card, 'last').value.trim(), number: field(card, 'number').value.trim(),
-        bike: (bikes[0] || '').slice(0, 40), cls: field(card, 'cls').value.trim(), main: color(card, 'main'), accent: color(card, 'accent') });
+        bike: (bikes[0] || '').slice(0, 40), cls: field(card, 'cls').value.trim(), main: color(card, 'main'), accent: color(card, 'accent'), plateName: bigName(card) });
     }
     var data = { parent: value('parent'), phone: value('phone'), email: value('email'), email2: value('email2'), phoneKind: value('phoneKind'),
       riders: riders, box: value('box'), track: value('track'), note: value('note'), social: value('social'), ship: { street: value('street'), city: value('city'), state: value('state'), zip: value('zip') }, guardian: value('who') === 'guardian', self: value('who') === 'self', website: value('website') };
@@ -529,7 +538,8 @@
     }
     var cards = list.querySelectorAll('.rider');
     for (var i = 0; i < data.riders.length; i++) {
-      if (!data.riders[i].first) return say('Add your rider\'s first name.', field(cards[i], 'first'));
+      if (!data.riders[i].first) return say(data.self && !i ? 'Add your first and last name.' : 'Add your rider\'s first name.', data.self && !i ? form.elements.parent : field(cards[i], 'first'));
+      if (!data.riders[i].last) return say(data.self && !i ? 'Add your last name too.' : 'Add your rider\'s last name.', data.self && !i ? form.elements.parent : field(cards[i], 'last'));
       if (data.riders[i].number && !/^#?\d{1,3}[a-z]?$/i.test(data.riders[i].number)) return say('A race number is up to 3 digits, like 72 or 7A. Or leave it blank.', field(cards[i], 'number'));
     }
     return true;
