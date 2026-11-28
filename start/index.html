@@ -75,7 +75,7 @@
   .sw span { display: block; width: 44px; height: 44px; border-radius: 10px; border: 2px solid var(--line); cursor: pointer; }
   .sw input:checked + span { border-color: var(--ink); box-shadow: 0 0 0 2px var(--orange); }
 
-  .btn { display: inline-block; background: var(--orange); color: #17191C; border: 0; cursor: pointer; font: 800 20px 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .04em; padding: 16px 28px; border-radius: 12px; width: 100%; min-height: 58px; }
+  .btn { display: inline-block; text-decoration: none; text-align: center; background: var(--orange); color: #17191C; border: 0; cursor: pointer; font: 800 20px 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .04em; padding: 16px 28px; border-radius: 12px; width: 100%; min-height: 58px; }
   .btn[disabled] { opacity: .6; cursor: default; }
   .ghost { background: transparent; color: var(--ink); border: 2px dashed var(--line); font-size: 16px; min-height: 50px; padding: 12px; }
   .tick { display: flex; gap: 12px; align-items: flex-start; color: var(--ink); font-size: 16px; cursor: pointer; }
@@ -224,6 +224,7 @@
     <!-- Kam, Nov 21: an Android family uses Chrome. The first sync off the box is done with us in the pit. -->
     <p class="sub" id="madeAndroid" hidden><b style="color:var(--ink)">On Android?</b> Open <a href="https://app.mototoolsmx.com">app.mototoolsmx.com</a> in Chrome and sign in with the same email. You get rides off the box right there.</p>
     <p class="fine">No GPS box yet? Find us in the pit.</p>
+    <p class="fine"><a href="#" class="newSignup">Start a new sign-up</a></p>
   </section>
 
   <!-- Signed up in the pit, waiting for Kam to tap Connect. Flips to "made" by itself. -->
@@ -231,7 +232,15 @@
     <div class="check wait" aria-hidden="true">…</div>
     <h2>Almost there</h2>
     <p class="sub" id="heldLine">Show this screen to us in our pit.</p>
-    <button class="btn" type="button" id="heldAgain" hidden style="width:auto">Check again</button>
+    <!-- Kam, Nov 27 at Mesquite: families walked off before he tapped Connect and never saw the app link. Give it now. -->
+    <div id="heldApp">
+      <a class="btn" href="https://testflight.apple.com/join/YKswYPvx">Get the app</a>
+      <p class="sub">Install it now. We'll approve you in the pit, then open Moto Tools and sign in with <b class="email" id="heldEmail"></b>.</p>
+    </div>
+    <p class="sub" id="heldAndroid" hidden><b style="color:var(--ink)">On Android?</b> Once we approve you, open <a href="https://app.mototoolsmx.com">app.mototoolsmx.com</a> in Chrome and sign in with <b class="email" id="heldEmail2"></b>.</p>
+    <button class="btn ghost" type="button" id="heldAgain" hidden style="width:auto">Check again</button>
+    <p class="fine">You can close this page. Open it again any time to see where you are.</p>
+    <p class="fine"><a href="#" class="newSignup">Start a new sign-up</a></p>
   </section>
 
   <noscript><p class="problem">This form needs JavaScript. Or just text us your rider's name, number and bike size.</p></noscript>
@@ -577,7 +586,22 @@
     show('sent');
   }
   // The server gives first names only. If it gives none, the names they typed.
+  // The pit sign-up is remembered on this phone (Kam, Nov 27): opening /pit again shows where they are and the app
+  // link, not an empty form that gets sent twice. Two weeks, then it's forgotten.
+  var KEEP = 'mt-pit-signup';
+  function remember(state) { try { localStorage.setItem(KEEP, JSON.stringify(Object.assign({ at: Date.now() }, state))); } catch (e) {} }
+  function recalled() {
+    try { var got = JSON.parse(localStorage.getItem(KEEP) || 'null'); return got && got.email && Date.now() - got.at < 14 * 86400000 ? got : null; } catch (e) { return null; }
+  }
+  function forget() { try { localStorage.removeItem(KEEP); } catch (e) {} }
+  Array.prototype.forEach.call(document.querySelectorAll('.newSignup'), function (link) {
+    link.addEventListener('click', function (event) {
+      event.preventDefault(); forget();
+      location.href = location.pathname + location.search;
+    });
+  });
   function made(riders, typed, email, phoneKind) {
+    remember({ result: 'made', riders: riders, typed: typed, email: email, phoneKind: phoneKind });
     document.getElementById('madeAndroid').hidden = !phoneKind || phoneKind === 'iPhone';
     var names = Array.isArray(riders) && riders.length ? riders.map(String) : typed;
     document.getElementById('madeLine').textContent = names.length > 1 ? both(names) + '’s pages are ready.' : names[0] + '’s page is ready.';
@@ -587,6 +611,11 @@
   // Held for Kam: ask every 5 seconds until he taps Connect, for about 30 minutes, then a button to ask again.
   function held(ticket, typed, data) {
     var line = document.getElementById('heldLine'), again = document.getElementById('heldAgain'), timer = 0, until = 0;
+    remember({ result: 'held', ticket: ticket, typed: typed, email: data.email, phoneKind: data.phoneKind, parent: data.parent, self: data.self });
+    // In the pit nobody picks a phone (it's sent as "Both or not sure"): show the app button and the Android line.
+    document.getElementById('heldApp').hidden = data.phoneKind === 'Android';
+    document.getElementById('heldAndroid').hidden = !data.phoneKind || data.phoneKind === 'iPhone';
+    document.getElementById('heldEmail').textContent = data.email; document.getElementById('heldEmail2').textContent = data.email;
     show('held');
     function ask() {
       fetch(API + '/api/setup-request/status?ticket=' + encodeURIComponent(ticket))
@@ -594,7 +623,7 @@
         .catch(function () { return {}; })
         .then(function (body) {
           if (body.result === 'made') { clearInterval(timer); return made(body.riders, typed, data.email, data.phoneKind); }
-          if (body.result === 'sent') { clearInterval(timer); return thanks(data, typed); }
+          if (body.result === 'sent') { clearInterval(timer); forget(); return thanks(data, typed); }
           if (Date.now() > until) { clearInterval(timer); line.textContent = 'Find us in our pit, then tap Check again.'; again.hidden = false; }
         });
     }
@@ -603,8 +632,12 @@
       until = Date.now() + 30 * 60000; clearInterval(timer); timer = setInterval(ask, 5000);
     }
     again.onclick = function () { start(); ask(); };
-    start();
+    start(); ask();
   }
+  // Back on the page after a pit sign-up: straight to where they are.
+  var before = pitEvent ? recalled() : null;
+  if (before && before.result === 'made') made(before.riders, before.typed, before.email, before.phoneKind);
+  else if (before && before.result === 'held' && before.ticket) held(before.ticket, before.typed, { email: before.email, phoneKind: before.phoneKind, parent: before.parent || '', self: before.self });
 })();
 </script>
 </body>

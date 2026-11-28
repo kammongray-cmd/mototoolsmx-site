@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Get the app · Moto Tools</title>
+<meta name="description" content="Get the Moto Tools app and sign in.">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Get the Moto Tools app">
+<meta property="og:description" content="Three steps: get the app, open it, sign in with your email.">
+<meta property="og:image" content="https://mototoolsmx.com/img/share-wordmark.png">
+<link rel="icon" href="../img/icon-wordmark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Kam, Nov 27 at Mesquite: one page to text a family that only needs the app. Same look as /start. */
+  :root { --orange: #F26B1D; --ink: #F5F3EE; --muted: #A9ADB3; --bg: #17191C; --panel: #212429; --line: #30343A; }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.5 Barlow, system-ui, -apple-system, sans-serif; }
+  a { color: var(--orange); }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 56px max(16px, env(safe-area-inset-left, 0px)); }
+  header { text-align: center; padding: 32px 0 26px; }
+  header img { width: 100%; max-width: 230px; height: auto; }
+  h1 { font: italic 800 40px/1 'Barlow Condensed', 'Arial Narrow', sans-serif; text-transform: uppercase; text-align: center; margin: 22px 0 18px; }
+  .btn { display: block; text-align: center; text-decoration: none; background: var(--orange); color: #17191C; font: 800 22px 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: .04em; padding: 16px 28px; border-radius: 12px; min-height: 60px; }
+  ol { list-style: none; counter-reset: s; padding: 0; margin: 22px 0 0; display: grid; gap: 12px; }
+  li { counter-increment: s; display: grid; grid-template-columns: 36px 1fr; gap: 12px; align-items: start; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; color: var(--muted); }
+  li::before { content: counter(s); width: 36px; height: 36px; border-radius: 50%; background: rgba(242,107,29,.16); color: var(--orange); display: grid; place-items: center; font: 800 20px 'Barlow Condensed', sans-serif; }
+  li b { color: var(--ink); font-weight: 600; display: block; }
+  .fine { color: var(--muted); font-size: 14px; text-align: center; margin: 22px 0 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><a href="../"><img src="../img/wordmark.png" alt="Moto Tools"></a></header>
+  <a class="btn" href="https://testflight.apple.com/join/YKswYPvx">Get the app</a>
+  <ol>
+    <li><div><b>Tap Get the app.</b>It opens Apple's TestFlight. If it asks you to get TestFlight first, get it, then come back and tap Get the app again.</div></li>
+    <li><div><b>Tap Install, then Open.</b>Moto Tools is free while we test it.</div></li>
+    <li><div><b>Sign in with your email.</b>Use the email you signed up with. We email you a 6-digit code. No password.</div></li>
+  </ol>
+  <p class="fine"><b style="color:var(--ink)">On Android?</b> Open <a href="https://app.mototoolsmx.com">app.mototoolsmx.com</a> in Chrome and sign in with your email.</p>
+  <p class="fine">Not signed up yet? <a href="../start/">Set up your rider</a></p>
+</div>
+</body>
+</html>
